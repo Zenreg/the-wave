@@ -4,7 +4,7 @@ export default function LocaleToggle() {
   const { locale, setLocale } = useLocale();
 
   return (
-    <div className="fixed top-4 right-4 z-50 flex gap-0.5 text-xs font-light">
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex gap-0.5 text-xs font-light">
       <button
         onClick={() => setLocale('fr')}
         className={`px-2 py-1 rounded-l transition-colors ${
