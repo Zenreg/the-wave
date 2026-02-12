@@ -8,6 +8,7 @@ import CountdownScreen from './components/CountdownScreen';
 import ActionScreen from './components/ActionScreen';
 import ResultScreen from './components/ResultScreen';
 import DebugPanel from './components/DebugPanel';
+import LocaleToggle from './components/LocaleToggle';
 
 const IS_DEV = import.meta.env.DEV;
 
@@ -47,6 +48,8 @@ function AppInner() {
           participation={participation}
         />
       )}
+
+      <LocaleToggle />
 
       {IS_DEV && (
         <DebugPanel currentScreen={screen} onNavigate={goToScreen} />
