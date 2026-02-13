@@ -731,4 +731,4 @@ const fallbackActionsFr: string[] = [
   'Ouvre les yeux doucement, comme au premier matin du monde, et accueille ce qui vient.',
 ];
 
-export default fallbackActionsFr;
+export default Object.freeze(fallbackActionsFr);

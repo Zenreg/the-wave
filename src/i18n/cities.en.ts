@@ -1,4 +1,5 @@
 import type { CityNames } from './types';
+import { deepFreeze } from '../lib/integrity';
 
 const citiesEn: CityNames = {
   '-12': ['Baker Island'],
@@ -30,4 +31,4 @@ const citiesEn: CityNames = {
   '14': ['Kiribati'],
 };
 
-export default citiesEn;
+export default deepFreeze(citiesEn);

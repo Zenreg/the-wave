@@ -2,8 +2,23 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+const COPYRIGHT = '/*! The Wave — © Fabrice GERNEZ 2024-2025. Tous droits réservés. */\n'
+
+function copyrightBanner() {
+  return {
+    name: 'copyright-banner',
+    generateBundle(_: unknown, bundle: Record<string, { type: string; code?: string }>) {
+      for (const file of Object.values(bundle)) {
+        if (file.type === 'chunk' && file.code) {
+          file.code = COPYRIGHT + file.code
+        }
+      }
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), copyrightBanner()],
   build: {
     rollupOptions: {
       output: {

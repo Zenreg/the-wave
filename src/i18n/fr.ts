@@ -25,4 +25,4 @@ const fr: TranslationKeys = {
   'debug.keyboardHint': 'Touches 1-5 pour naviguer',
 };
 
-export default fr;
+export default Object.freeze(fr);

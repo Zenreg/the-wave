@@ -366,4 +366,4 @@ const fallbackActionsEn: string[] = [
   'Open your eyes slowly, as if seeing the world for the very first time.',
 ];
 
-export default fallbackActionsEn;
+export default Object.freeze(fallbackActionsEn);

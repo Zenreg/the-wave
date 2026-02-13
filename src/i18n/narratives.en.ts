@@ -1,4 +1,5 @@
 import type { NarrativeTemplates } from './types';
+import { deepFreeze } from '../lib/integrity';
 
 const narrativesEn: NarrativeTemplates = {
   waveJustStarted: {
@@ -33,4 +34,4 @@ const narrativesEn: NarrativeTemplates = {
   },
 };
 
-export default narrativesEn;
+export default deepFreeze(narrativesEn);

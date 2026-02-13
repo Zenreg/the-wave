@@ -2,7 +2,7 @@ import type { Locale } from '../i18n/types';
 import fallbackActionsFr from '../i18n/fallbackActions.fr';
 import fallbackActionsEn from '../i18n/fallbackActions.en';
 
-const fallbacksByLocale: Record<Locale, string[]> = {
+const fallbacksByLocale: Record<Locale, readonly string[]> = {
   fr: fallbackActionsFr,
   en: fallbackActionsEn,
 };
