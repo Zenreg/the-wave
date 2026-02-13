@@ -1,11 +1,14 @@
 import { useEffect, useState, useRef } from 'react';
 
-// Séquence : ↑ ↑ ↓ ↓ ← → ← → W A V E
-const SEQ = [
+// Séquence signature : ↑ ↑ ↓ ↓ ← → ← → W A V E
+const SIG_SEQ = [
   'arrowup', 'arrowup', 'arrowdown', 'arrowdown',
   'arrowleft', 'arrowright', 'arrowleft', 'arrowright',
   'w', 'a', 'v', 'e',
 ];
+
+// Séquence debug : 15081944
+const DBG_SEQ = ['1', '5', '0', '8', '1', '9', '4', '4'];
 
 const D = [50,9,7,5,8,21,0,18,119,119,102,58,45,63,87,8309,86,38,64,217,83,64,17,29,23,87,5,19,69,102,88,87,20,35,9,19,18];
 const K = [116,104,101,119,97,118,101,50,48,50,52];
@@ -17,22 +20,38 @@ function r(): string {
 export function useSignature() {
   const [visible, setVisible] = useState(false);
   const [text, setText] = useState('');
-  const pos = useRef(0);
+  const [debug, setDebug] = useState(false);
+  const sigPos = useRef(0);
+  const dbgPos = useRef(0);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key.toLowerCase() === SEQ[pos.current]) {
-        pos.current++;
-        if (pos.current === SEQ.length) {
+      const key = e.key.toLowerCase();
+
+      // Signature sequence
+      if (key === SIG_SEQ[sigPos.current]) {
+        sigPos.current++;
+        if (sigPos.current === SIG_SEQ.length) {
           setText(r());
           setVisible(true);
-          pos.current = 0;
+          sigPos.current = 0;
           clearTimeout(timer.current);
           timer.current = setTimeout(() => setVisible(false), 6000);
         }
       } else {
-        pos.current = 0;
+        sigPos.current = 0;
+      }
+
+      // Debug sequence
+      if (e.key === DBG_SEQ[dbgPos.current]) {
+        dbgPos.current++;
+        if (dbgPos.current === DBG_SEQ.length) {
+          setDebug(d => !d);
+          dbgPos.current = 0;
+        }
+      } else {
+        dbgPos.current = 0;
       }
     }
     window.addEventListener('keydown', onKey);
@@ -42,5 +61,5 @@ export function useSignature() {
     };
   }, []);
 
-  return { visible, text };
+  return { visible, text, debug };
 }

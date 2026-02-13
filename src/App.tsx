@@ -74,7 +74,7 @@ function AppInner() {
 
       <LocaleToggle />
 
-      {IS_DEV && (
+      {(IS_DEV || sig.debug) && (
         <DebugPanel currentScreen={screen} onNavigate={goToScreen} />
       )}
     </>
