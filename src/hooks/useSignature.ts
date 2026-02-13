@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 
 // Séquence : ↑ ↑ ↓ ↓ ← → ← → W A V E
 const SEQ = [
-  'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-  'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+  'arrowup', 'arrowup', 'arrowdown', 'arrowdown',
+  'arrowleft', 'arrowright', 'arrowleft', 'arrowright',
   'w', 'a', 'v', 'e',
 ];
 
@@ -22,7 +22,7 @@ export function useSignature() {
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key === SEQ[pos.current]) {
+      if (e.key.toLowerCase() === SEQ[pos.current]) {
         pos.current++;
         if (pos.current === SEQ.length) {
           setText(r());
