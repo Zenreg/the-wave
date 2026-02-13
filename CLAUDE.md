@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-# NOW — Application de synchronisation humaine mondiale
+# The Wave — Application de synchronisation humaine mondiale
 
 ## Concept
 Chaque jour à 20h locale, tous les utilisateurs reçoivent UNE seule action de 60 secondes. Après participation, l'app montre combien de personnes l'ont fait + une carte monde avec une vague lumineuse. Pas de profil, pas de like, pas de commentaire.

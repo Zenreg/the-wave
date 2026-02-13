@@ -14,7 +14,7 @@ export default function LandingScreen({ onEnter }: LandingScreenProps) {
 
       <div className="relative z-10 text-center max-w-lg">
         <h1 className="text-7xl sm:text-8xl font-extralight tracking-[0.3em] glow-text mb-10">
-          NOW
+          THE WAVE
         </h1>
 
         <p className="text-lg sm:text-xl text-slate-400 leading-relaxed mb-16 font-light">

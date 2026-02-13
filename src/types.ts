@@ -46,6 +46,6 @@ export interface ParticipationBroadcast {
 
 /** LocalStorage keys */
 export const STORAGE_KEYS = {
-  PARTICIPATED_PREFIX: 'now_participated_',  // + YYYY-MM-DD
-  HAS_ENTERED: 'now_has_entered',
+  PARTICIPATED_PREFIX: 'wave_participated_',  // + YYYY-MM-DD
+  HAS_ENTERED: 'wave_has_entered',
 } as const;

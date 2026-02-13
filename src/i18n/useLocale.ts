@@ -4,7 +4,7 @@ import { createT } from './t';
 import type { GeoPoint } from '../types';
 
 const SUPPORTED_LOCALES: Locale[] = ['fr', 'en'];
-const STORAGE_KEY = 'now_locale';
+const STORAGE_KEY = 'wave_locale';
 
 function detectFromBrowser(): Locale | null {
   const lang = navigator.language?.toLowerCase().split('-')[0];

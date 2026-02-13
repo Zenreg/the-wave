@@ -1,5 +1,5 @@
 -- =============================================
--- NOW App - Schema initial
+-- The Wave App - Schema initial
 -- =============================================
 
 -- Actions quotidiennes (une par jour de l'année, clé = 'MM-DD')
