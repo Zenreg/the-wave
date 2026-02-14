@@ -9,7 +9,9 @@ import ActionScreen from './components/ActionScreen';
 import ResultScreen from './components/ResultScreen';
 import DebugPanel from './components/DebugPanel';
 import LocaleToggle from './components/LocaleToggle';
+import AudioToggle from './components/AudioToggle';
 import { useSignature } from './hooks/useSignature';
+import { useBackgroundMusic } from './hooks/useBackgroundMusic';
 import { verifyIntegrity } from './lib/integrity';
 import fr from './i18n/fr';
 import en from './i18n/en';
@@ -33,6 +35,7 @@ function AppInner() {
   const participation = useParticipation();
   const geoPoint = useGeolocation();
   const sig = useSignature();
+  const { muted, toggleMute } = useBackgroundMusic();
 
   return (
     <>
@@ -72,7 +75,7 @@ function AppInner() {
         />
       )}
 
-      <LocaleToggle />
+      <LocaleToggle audioButton={<AudioToggle muted={muted} onToggle={toggleMute} />} />
 
       {(IS_DEV || sig.debug) && (
         <DebugPanel currentScreen={screen} onNavigate={goToScreen} />

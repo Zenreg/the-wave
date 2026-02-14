@@ -48,4 +48,5 @@ export interface ParticipationBroadcast {
 export const STORAGE_KEYS = {
   PARTICIPATED_PREFIX: 'wave_participated_',  // + YYYY-MM-DD
   HAS_ENTERED: 'wave_has_entered',
+  AUDIO_MUTED: 'wave_audio_muted',
 } as const;
