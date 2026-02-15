@@ -10,24 +10,20 @@ export function computeBandState(offset: number, now: Date): TzBandState {
 
   // What hour is it in this timezone?
   const localHour = ((utcHour + offset) % 24 + 24) % 24;
+  // For integer offsets, local minute = UTC minute
+  const localMinute = utcMinute;
 
-  // Within the action window (20:00–20:00:59)
-  if (localHour === 20 && utcMinute === now.getUTCMinutes()) {
-    // Need to check if the local minute is 0
-    // Since offset only shifts hours (for integer offsets), local minute = UTC minute
-    if (utcMinute === 0) {
-      // Exact match: but the window is 20:00:00-20:00:59
-      // Actually we consider the full hour 20 as "recently done" for visual effect
-    }
-  }
+  // Within the ±5min action window (19:55–20:05)
+  const inWindow =
+    (localHour === 19 && localMinute >= 55) ||
+    (localHour === 20 && localMinute <= 5);
 
-  // Simplified: localHour === 20 means "active or just done"
-  if (localHour === 20) {
+  if (inWindow) {
     return 'active';
   }
 
-  // Past 20:00 today (21-23) or past midnight (0-7 = did it "last night")
-  if (localHour > 20 || localHour < 8) {
+  // Past the window today (20:06–23:59) or past midnight (0:00–7:59)
+  if (localHour === 20 ? localMinute > 5 : (localHour > 20 || localHour < 8)) {
     return 'done';
   }
 

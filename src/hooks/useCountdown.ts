@@ -10,11 +10,11 @@ interface CountdownState {
   isPast: boolean;
 }
 
-/** Compute seconds until next 20:00 local */
-export function getSecondsUntilNext8PM(): number {
+/** Compute seconds until 19:55 local (start of action window) */
+export function getSecondsUntilWindow(): number {
   const now = new Date();
   const target = new Date(now);
-  target.setHours(20, 0, 0, 0);
+  target.setHours(19, 55, 0, 0);
 
   if (now >= target) {
     target.setDate(target.getDate() + 1);
@@ -23,18 +23,21 @@ export function getSecondsUntilNext8PM(): number {
   return Math.floor((target.getTime() - now.getTime()) / 1000);
 }
 
-/** Check if current local time is within the 60-second action window */
+/** Check if current local time is within the ±5min action window (19:55–20:05) */
 export function isWithinActionWindow(): boolean {
   const now = new Date();
-  return now.getHours() === 20 && now.getMinutes() === 0;
+  const h = now.getHours();
+  const m = now.getMinutes();
+  // 19:55–19:59 or 20:00–20:05
+  return (h === 19 && m >= 55) || (h === 20 && m <= 5);
 }
 
-/** Check if today's action window has already passed */
+/** Check if today's action window has already passed (after 20:05) */
 export function isActionWindowPast(): boolean {
   const now = new Date();
-  const hour = now.getHours();
-  const minute = now.getMinutes();
-  return hour === 20 ? minute > 0 : hour > 20;
+  const h = now.getHours();
+  const m = now.getMinutes();
+  return h === 20 ? m > 5 : h > 20;
 }
 
 export function useCountdown(): CountdownState {
@@ -53,7 +56,7 @@ export function useCountdown(): CountdownState {
 function computeState(): CountdownState {
   const isReady = isWithinActionWindow();
   const isPast = isActionWindowPast();
-  const totalSeconds = isReady ? 0 : getSecondsUntilNext8PM();
+  const totalSeconds = isReady ? 0 : getSecondsUntilWindow();
 
   return {
     hours: Math.floor(totalSeconds / 3600),
