@@ -46,35 +46,29 @@ export default function TimezoneWave({ bands, width, height }: TimezoneWaveProps
 
       {bands.map((band) => {
         const centerLng = band.offset * 15;
-        const x = lngToX(centerLng - 7.5, width);
+        // Normalize x into [0, width)
+        const rawX = lngToX(centerLng - 7.5, width);
+        const x = ((rawX % width) + width) % width;
 
-        // Handle bands that wrap around the date line
-        const rects = [];
-        if (x < 0) {
-          // Band wraps on the left — draw two parts
-          rects.push({ x: 0, w: x + bandWidthPx, key: `${band.offset}-r` });
-          rects.push({ x: width + x, w: -x, key: `${band.offset}-l` });
-        } else if (x + bandWidthPx > width) {
-          // Band wraps on the right
-          rects.push({ x, w: width - x, key: `${band.offset}-l` });
-          rects.push({ x: 0, w: (x + bandWidthPx) - width, key: `${band.offset}-r` });
-        } else {
-          rects.push({ x, w: bandWidthPx, key: `${band.offset}` });
+        const fill = bandColor(band);
+        const filter = band.state === 'active' ? 'url(#tz-glow)' : undefined;
+        const className = band.state === 'active' ? 'animate-glow-pulse' : '';
+        const style = { transition: 'fill 2s ease-in-out' };
+
+        // Band wraps around the right edge
+        if (x + bandWidthPx > width) {
+          return [
+            <rect key={`${band.offset}-l`} x={x} y={0} width={width - x} height={height}
+              fill={fill} filter={filter} className={className} style={style} />,
+            <rect key={`${band.offset}-r`} x={0} y={0} width={(x + bandWidthPx) - width} height={height}
+              fill={fill} filter={filter} className={className} style={style} />,
+          ];
         }
 
-        return rects.map(r => (
-          <rect
-            key={r.key}
-            x={r.x}
-            y={0}
-            width={r.w}
-            height={height}
-            fill={bandColor(band)}
-            filter={band.state === 'active' ? 'url(#tz-glow)' : undefined}
-            className={band.state === 'active' ? 'animate-glow-pulse' : ''}
-            style={{ transition: 'fill 2s ease-in-out' }}
-          />
-        ));
+        return (
+          <rect key={band.offset} x={x} y={0} width={bandWidthPx} height={height}
+            fill={fill} filter={filter} className={className} style={style} />
+        );
       })}
     </g>
   );
