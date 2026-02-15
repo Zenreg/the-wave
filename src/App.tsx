@@ -55,6 +55,7 @@ function AppInner() {
         <CountdownScreen
           actionText={action?.actionText}
           onReady={() => goToScreen('action')}
+          participation={participation}
         />
       )}
 

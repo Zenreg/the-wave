@@ -8,16 +8,19 @@ function getInitialScreen(): AppScreen {
 
   if (!hasEntered) return 'landing';
 
-  // Check if already participated today
-  const now = new Date();
-  const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-  const hasParticipated = localStorage.getItem(STORAGE_KEYS.PARTICIPATED_PREFIX + todayKey) === '1';
+  // Before 20h → always countdown (never show result early)
+  if (!isWithinActionWindow() && !isActionWindowPast()) return 'countdown';
 
-  if (hasParticipated) return 'result';
-  if (isWithinActionWindow()) return 'action';
-  if (isActionWindowPast()) return 'result';
+  // During the 20:00 window → check if already participated
+  if (isWithinActionWindow()) {
+    const now = new Date();
+    const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const hasParticipated = localStorage.getItem(STORAGE_KEYS.PARTICIPATED_PREFIX + todayKey) === '1';
+    return hasParticipated ? 'result' : 'action';
+  }
 
-  return 'countdown';
+  // After 20:01 → result
+  return 'result';
 }
 
 export function useNowState() {
