@@ -23,7 +23,7 @@ export default function CountdownScreen({ actionText, onReady, participation }: 
   const narrative = useWaveNarrative(bands);
   const { t } = useLocale();
   const { totalCount, dots } = participation;
-  const simDots = useSimulatedDots(waveCenterLng, SIM_ENABLED);
+  const simDots = useSimulatedDots(SIM_ENABLED);
   const allDots = SIM_ENABLED ? [...dots, ...simDots] : dots;
 
   useEffect(() => {

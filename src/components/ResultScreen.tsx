@@ -20,7 +20,7 @@ export default function ResultScreen({ actionText, participation }: ResultScreen
   const { bands, waveCenterLng } = useTimezoneWave();
   const narrative = useWaveNarrative(bands);
   const { t, formatNumber } = useLocale();
-  const simDots = useSimulatedDots(waveCenterLng, SIM_ENABLED);
+  const simDots = useSimulatedDots(SIM_ENABLED);
   const allDots = SIM_ENABLED ? [...dots, ...simDots] : dots;
 
   return (
