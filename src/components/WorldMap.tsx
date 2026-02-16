@@ -68,26 +68,22 @@ export default function WorldMap({ waveCenterLng, dots = [] }: WorldMapProps) {
             return (
               <circle
                 key={dot.id}
-                cx={x} cy={y} r={inBand ? 1.8 : 0.8}
-                fill="#fbbf24"
-                opacity={inBand ? 0.95 : 0.12}
+                cx={x} cy={y} r={1}
+                fill={inBand ? '#fbbf24' : '#fbbf24'}
+                opacity={inBand ? 0.9 : 0.15}
               />
             );
           })}
         </g>
       </svg>
 
-      {/* Connection counter */}
       {visibleCount > 0 && (
-        <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
+        <div className="absolute bottom-3 right-3">
           <span
             key={visibleCount}
-            className="text-sm text-amber-300/70 font-light tabular-nums animate-fade-in"
+            className="text-sm text-amber-300/50 font-light tabular-nums animate-fade-in"
           >
             {visibleCount}
-          </span>
-          <span className="text-xs text-amber-300/40 font-light">
-            connexions
           </span>
         </div>
       )}
