@@ -70,7 +70,7 @@ function localHourAt(lng: number, now: Date): number {
 /** Is this city's local time past the 20h window? (done = behind the wave) */
 function isDone(lng: number, now: Date): boolean {
   const h = localHourAt(lng, now);
-  return h > 20.083 || h < 8; // past 20:05 or past midnight until 8am
+  return h > 20.083; // only evening (20:05–23:59), NOT past midnight
 }
 
 /** Is this city currently in the active 20h window? */

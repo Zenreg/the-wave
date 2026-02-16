@@ -1,6 +1,5 @@
 import { useLocale } from '../i18n';
 import type { MapDot } from '../types';
-import { computeBandState } from '../hooks/useTimezoneWave';
 import { WORLD_LAND_PATH } from '../data/worldMapPath';
 import TimezoneWave from './TimezoneWave';
 
@@ -19,18 +18,31 @@ function geoToSvg(lat: number, lng: number): { x: number; y: number } {
   };
 }
 
+/**
+ * Determine dot visibility based on local time at the dot's longitude.
+ * - 19:55–20:05 local → in band (bright)
+ * - 20:05–23:59 local → behind the band (dim)
+ * - 00:00–19:54 local → ahead or cleared (hidden)
+ * This ensures dots only appear BEHIND the wave and clear at midnight.
+ */
+function dotVisibility(dotLng: number, now: Date): 'bright' | 'dim' | 'hidden' {
+  const utcDecimal = now.getUTCHours() + now.getUTCMinutes() / 60 + now.getUTCSeconds() / 3600;
+  const localHour = ((utcDecimal + dotLng / 15) % 24 + 24) % 24;
+
+  if (localHour >= 19.917 && localHour <= 20.083) return 'bright';
+  if (localHour > 20.083) return 'dim';
+  return 'hidden';
+}
+
 export default function WorldMap({ waveCenterLng, dots = [] }: WorldMapProps) {
   const { t } = useLocale();
   const now = new Date();
 
-  // Classify each dot using the band state at its longitude
   let visibleCount = 0;
   const classifiedDots = dots.map(dot => {
-    const offset = Math.round(dot.point.lng / 15);
-    const clamped = Math.max(-12, Math.min(14, offset));
-    const state = computeBandState(clamped, now);
-    if (state !== 'future') visibleCount++;
-    return { dot, state };
+    const vis = dotVisibility(dot.point.lng, now);
+    if (vis !== 'hidden') visibleCount++;
+    return { dot, vis };
   });
 
   return (
@@ -62,11 +74,11 @@ export default function WorldMap({ waveCenterLng, dots = [] }: WorldMapProps) {
         />
 
         <g>
-          {classifiedDots.map(({ dot, state }) => {
-            if (state === 'future') return null;
+          {classifiedDots.map(({ dot, vis }) => {
+            if (vis === 'hidden') return null;
 
             const { x, y } = geoToSvg(dot.point.lat, dot.point.lng);
-            const inBand = state === 'active';
+            const inBand = vis === 'bright';
 
             return (
               <circle
