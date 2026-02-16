@@ -71,9 +71,9 @@ export default function WorldMap({ waveCenterLng, dots = [] }: WorldMapProps) {
             return (
               <circle
                 key={dot.id}
-                cx={x} cy={y} r={inBand ? 1.8 : 1}
+                cx={x} cy={y} r={inBand ? 1.8 : 0.8}
                 fill="#fbbf24"
-                opacity={inBand ? 0.95 : 0.4}
+                opacity={inBand ? 0.95 : 0.12}
               />
             );
           })}

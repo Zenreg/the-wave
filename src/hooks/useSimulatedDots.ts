@@ -81,7 +81,7 @@ function isActive(lng: number, now: Date): boolean {
 
 /** Small random offset to simulate multiple people in a city */
 function jitter(): number {
-  return (Math.random() - 0.5) * 2.5; // ±1.25°
+  return (Math.random() - 0.5) * 1; // ±0.5°
 }
 
 /**
