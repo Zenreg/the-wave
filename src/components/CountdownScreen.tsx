@@ -4,8 +4,11 @@ import { useTimezoneWave } from '../hooks/useTimezoneWave';
 import { useWaveNarrative } from '../hooks/useWaveNarrative';
 import { useLocale } from '../i18n';
 import type { useParticipation } from '../hooks/useParticipation';
+import { useSimulatedDots } from '../hooks/useSimulatedDots';
 import BreathingOrb from './BreathingOrb';
 import WorldMap from './WorldMap';
+
+const SIM_ENABLED = new URLSearchParams(window.location.search).has('sim');
 
 interface CountdownScreenProps {
   actionText?: string;
@@ -19,6 +22,8 @@ export default function CountdownScreen({ actionText, onReady, participation }: 
   const narrative = useWaveNarrative(bands);
   const { t } = useLocale();
   const { totalCount, dots } = participation;
+  const simDots = useSimulatedDots(waveCenterLng, SIM_ENABLED);
+  const allDots = SIM_ENABLED ? [...dots, ...simDots] : dots;
 
   useEffect(() => {
     if (isReady) onReady();
@@ -74,7 +79,7 @@ export default function CountdownScreen({ actionText, onReady, participation }: 
 
         {/* Live world map with wave */}
         <div className="w-full mt-2">
-          <WorldMap waveCenterLng={waveCenterLng} dots={dots} />
+          <WorldMap waveCenterLng={waveCenterLng} dots={allDots} />
         </div>
 
         <p className="text-sm text-slate-600 font-light">

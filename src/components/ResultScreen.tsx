@@ -2,9 +2,12 @@ import { useTimezoneWave } from '../hooks/useTimezoneWave';
 import { useWaveNarrative } from '../hooks/useWaveNarrative';
 import { useLocale } from '../i18n';
 import type { useParticipation } from '../hooks/useParticipation';
+import { useSimulatedDots } from '../hooks/useSimulatedDots';
 import ParticipantCounter from './ParticipantCounter';
 import WorldMap from './WorldMap';
 import BreathingOrb from './BreathingOrb';
+
+const SIM_ENABLED = new URLSearchParams(window.location.search).has('sim');
 
 interface ResultScreenProps {
   actionText?: string;
@@ -16,6 +19,8 @@ export default function ResultScreen({ actionText, participation }: ResultScreen
   const { bands, waveCenterLng } = useTimezoneWave();
   const narrative = useWaveNarrative(bands);
   const { t, formatNumber } = useLocale();
+  const simDots = useSimulatedDots(waveCenterLng, SIM_ENABLED);
+  const allDots = SIM_ENABLED ? [...dots, ...simDots] : dots;
 
   return (
     <div className="screen screen-enter overflow-y-auto">
@@ -50,7 +55,7 @@ export default function ResultScreen({ actionText, participation }: ResultScreen
         </div>
 
         <div className="w-full mt-4">
-          <WorldMap waveCenterLng={waveCenterLng} dots={dots} />
+          <WorldMap waveCenterLng={waveCenterLng} dots={allDots} />
         </div>
 
         <p className="text-sm text-slate-600 font-light mt-4">
