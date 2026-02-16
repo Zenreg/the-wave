@@ -19,19 +19,26 @@ function geoToSvg(lat: number, lng: number): { x: number; y: number } {
 }
 
 /**
- * Determine dot visibility based on local time at the dot's longitude.
- * - 19:55–20:05 local → in band (bright)
- * - 20:05–23:59 local → behind the band (dim)
- * - 00:00–19:54 local → ahead or cleared (hidden)
- * This ensures dots only appear BEHIND the wave and clear at midnight.
+ * Double-check visibility: local time AND geographic position.
+ * A dot must pass BOTH checks to be visible.
  */
-function dotVisibility(dotLng: number, now: Date): 'bright' | 'dim' | 'hidden' {
+function dotVisibility(dotLng: number, waveCenterLng: number, now: Date): 'bright' | 'dim' | 'hidden' {
+  // --- Check 1: geographic — dot must NOT be west of the band ---
+  let d = dotLng - waveCenterLng;
+  while (d > 180) d -= 360;
+  while (d < -180) d += 360;
+  if (d < -8) return 'hidden'; // west of leading edge → ahead → hide
+
+  // --- Check 2: local time at the dot's longitude ---
   const utcDecimal = now.getUTCHours() + now.getUTCMinutes() / 60 + now.getUTCSeconds() / 3600;
   const localHour = ((utcDecimal + dotLng / 15) % 24 + 24) % 24;
+  if (localHour < 19.917) return 'hidden'; // before 19:55 → ahead → hide
 
-  if (localHour >= 19.917 && localHour <= 20.083) return 'bright';
-  if (localHour > 20.083) return 'dim';
-  return 'hidden';
+  // In band (19:55–20:05 local)
+  if (localHour <= 20.083) return 'bright';
+
+  // Behind (20:05–23:59 local)
+  return 'dim';
 }
 
 export default function WorldMap({ waveCenterLng, dots = [] }: WorldMapProps) {
@@ -40,7 +47,7 @@ export default function WorldMap({ waveCenterLng, dots = [] }: WorldMapProps) {
 
   let visibleCount = 0;
   const classifiedDots = dots.map(dot => {
-    const vis = dotVisibility(dot.point.lng, now);
+    const vis = dotVisibility(dot.point.lng, waveCenterLng, now);
     if (vis !== 'hidden') visibleCount++;
     return { dot, vis };
   });

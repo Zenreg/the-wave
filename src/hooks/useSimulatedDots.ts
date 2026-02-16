@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { MapDot } from '../types';
+import { computeWaveCenterLng } from './useTimezoneWave';
 
 /** Major world cities spread across all timezones */
 const CITIES = [
@@ -99,19 +100,26 @@ export function useSimulatedDots(enabled: boolean): MapDot[] {
 
     // Seed: place dots on cities already behind the wave
     const now = new Date();
+    const wc = computeWaveCenterLng(now);
     const seed: MapDot[] = [];
     let id = 0;
 
     for (const city of CITIES) {
-      if (isDone(city.lng, now)) {
-        const count = 2 + Math.floor(Math.random() * 5); // 2–6 dots per city
-        for (let i = 0; i < count; i++) {
-          seed.push({
-            id: `sim-${id++}`,
-            point: { lat: city.lat + jitter(), lng: city.lng + jitter() },
-            timestamp: Date.now(),
-          });
-        }
+      if (!isDone(city.lng, now)) continue;
+
+      // Extra check: city must be east of the band (behind, not ahead)
+      let d = city.lng - wc;
+      while (d > 180) d -= 360;
+      while (d < -180) d += 360;
+      if (d < 8) continue; // not clearly behind → skip
+
+      const count = 2 + Math.floor(Math.random() * 5); // 2–6 dots per city
+      for (let i = 0; i < count; i++) {
+        seed.push({
+          id: `sim-${id++}`,
+          point: { lat: city.lat + jitter(), lng: city.lng + jitter() },
+          timestamp: Date.now(),
+        });
       }
     }
     setDots(seed);
