@@ -15,7 +15,7 @@ interface CountdownScreenProps {
 
 export default function CountdownScreen({ actionText, onReady, participation }: CountdownScreenProps) {
   const { hours, minutes, seconds, isReady } = useCountdown();
-  const { bands } = useTimezoneWave();
+  const { bands, waveCenterLng } = useTimezoneWave();
   const narrative = useWaveNarrative(bands);
   const { t } = useLocale();
   const { totalCount, dots } = participation;
@@ -74,7 +74,7 @@ export default function CountdownScreen({ actionText, onReady, participation }: 
 
         {/* Live world map with wave */}
         <div className="w-full mt-2">
-          <WorldMap bands={bands} dots={dots} />
+          <WorldMap waveCenterLng={waveCenterLng} dots={dots} />
         </div>
 
         <p className="text-sm text-slate-600 font-light">

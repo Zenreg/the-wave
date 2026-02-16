@@ -38,12 +38,32 @@ export function computeAllBands(now: Date): TimezoneBand[] {
   }));
 }
 
+/** Longitude where it's currently 20:00, moving westward continuously */
+export function computeWaveCenterLng(now: Date): number {
+  const utcH = now.getUTCHours();
+  const utcM = now.getUTCMinutes();
+  const utcS = now.getUTCSeconds();
+  const utcDecimal = utcH + utcM / 60 + utcS / 3600;
+
+  // UTC offset where local time = 20:00 → offset = 20 - utcDecimal
+  // Longitude = offset * 15°
+  let lng = (20 - utcDecimal) * 15;
+
+  // Normalize to [-180, 180]
+  while (lng > 180) lng -= 360;
+  while (lng < -180) lng += 360;
+  return lng;
+}
+
 export function useTimezoneWave() {
   const [bands, setBands] = useState<TimezoneBand[]>(() => computeAllBands(new Date()));
+  const [waveCenterLng, setWaveCenterLng] = useState<number>(() => computeWaveCenterLng(new Date()));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setBands(computeAllBands(new Date()));
+      const now = new Date();
+      setBands(computeAllBands(now));
+      setWaveCenterLng(computeWaveCenterLng(now));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
@@ -60,5 +80,5 @@ export function useTimezoneWave() {
     ));
   };
 
-  return { bands, updateParticipantCount, incrementParticipantCount };
+  return { bands, waveCenterLng, updateParticipantCount, incrementParticipantCount };
 }

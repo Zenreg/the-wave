@@ -13,7 +13,7 @@ interface ResultScreenProps {
 
 export default function ResultScreen({ actionText, participation }: ResultScreenProps) {
   const { totalCount, myTzCount, dots } = participation;
-  const { bands } = useTimezoneWave();
+  const { bands, waveCenterLng } = useTimezoneWave();
   const narrative = useWaveNarrative(bands);
   const { t, formatNumber } = useLocale();
 
@@ -50,7 +50,7 @@ export default function ResultScreen({ actionText, participation }: ResultScreen
         </div>
 
         <div className="w-full mt-4">
-          <WorldMap bands={bands} dots={dots} />
+          <WorldMap waveCenterLng={waveCenterLng} dots={dots} />
         </div>
 
         <p className="text-sm text-slate-600 font-light mt-4">
