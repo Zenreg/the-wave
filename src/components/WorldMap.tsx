@@ -62,16 +62,6 @@ export default function WorldMap({ waveCenterLng, dots = [] }: WorldMapProps) {
         />
 
         <g>
-          <defs>
-            <filter id="dot-glow">
-              <feGaussianBlur stdDeviation="2" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-
           {classifiedDots.map(({ dot, state }) => {
             if (state === 'future') return null;
 
@@ -81,10 +71,9 @@ export default function WorldMap({ waveCenterLng, dots = [] }: WorldMapProps) {
             return (
               <circle
                 key={dot.id}
-                cx={x} cy={y} r={inBand ? 2.5 : 1.5}
+                cx={x} cy={y} r={inBand ? 1.8 : 1}
                 fill="#fbbf24"
-                opacity={inBand ? 0.95 : 0.35}
-                filter="url(#dot-glow)"
+                opacity={inBand ? 0.95 : 0.4}
               />
             );
           })}
