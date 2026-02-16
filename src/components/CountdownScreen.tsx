@@ -8,7 +8,8 @@ import { useSimulatedDots } from '../hooks/useSimulatedDots';
 import BreathingOrb from './BreathingOrb';
 import WorldMap from './WorldMap';
 
-const SIM_ENABLED = new URLSearchParams(window.location.search).has('sim');
+// Simulation toujours active pour le moment (on retirera après test)
+const SIM_ENABLED = true;
 
 interface CountdownScreenProps {
   actionText?: string;

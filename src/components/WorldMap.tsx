@@ -86,10 +86,10 @@ export default function WorldMap({ waveCenterLng, dots = [] }: WorldMapProps) {
             return (
               <circle
                 key={dot.id}
-                cx={x} cy={y} r={inBand ? 1.5 : 1}
+                cx={x} cy={y} r={inBand ? 3 : 2}
                 fill="#fbbf24"
-                opacity={inBand ? 0.9 : 0.25}
-                filter={inBand ? 'url(#dot-glow)' : undefined}
+                opacity={inBand ? 0.95 : 0.35}
+                filter="url(#dot-glow)"
               />
             );
           })}

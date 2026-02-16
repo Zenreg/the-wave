@@ -7,7 +7,8 @@ import ParticipantCounter from './ParticipantCounter';
 import WorldMap from './WorldMap';
 import BreathingOrb from './BreathingOrb';
 
-const SIM_ENABLED = new URLSearchParams(window.location.search).has('sim');
+// Simulation toujours active pour le moment (on retirera après test)
+const SIM_ENABLED = true;
 
 interface ResultScreenProps {
   actionText?: string;
