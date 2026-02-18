@@ -70,7 +70,7 @@ export default function WorldMap({ waveCenterLng, dots = [] }: WorldMapProps) {
                 key={dot.id}
                 cx={x} cy={y} r={1}
                 fill={inBand ? '#fbbf24' : '#fbbf24'}
-                opacity={inBand ? 0.9 : 0.15}
+                opacity={inBand ? 0.9 : 0.05}
               />
             );
           })}
