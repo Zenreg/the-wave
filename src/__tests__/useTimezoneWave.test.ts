@@ -44,18 +44,48 @@ describe('useTimezoneWave', () => {
       const now = new Date('2026-02-12T06:00:00Z');
       expect(computeBandState(14, now)).toBe('active');
     });
+
+    it('handles UTC+5.5 (Inde) — offset demi-heure', () => {
+      // UTC 14:30 → offset +5.5 → local 20:00 (active)
+      const now = new Date('2026-02-12T14:30:00Z');
+      expect(computeBandState(5.5, now)).toBe('active');
+    });
+
+    it('handles UTC+5.75 (Népal) — offset 45 min', () => {
+      // UTC 14:15 → offset +5.75 → local 20:00 (active)
+      const now = new Date('2026-02-12T14:15:00Z');
+      expect(computeBandState(5.75, now)).toBe('active');
+    });
+
+    it('handles UTC-3.5 (Terre-Neuve) — offset demi-heure négatif', () => {
+      // UTC 23:30 → offset -3.5 → local 20:00 (active)
+      const now = new Date('2026-02-12T23:30:00Z');
+      expect(computeBandState(-3.5, now)).toBe('active');
+    });
+
+    it('UTC+5.5 returns "future" avant 20h', () => {
+      // UTC 12:00 → offset +5.5 → local 17:30 (future)
+      const now = new Date('2026-02-12T12:00:00Z');
+      expect(computeBandState(5.5, now)).toBe('future');
+    });
+
+    it('UTC+5.5 returns "done" après 20h', () => {
+      // UTC 15:00 → offset +5.5 → local 20:30 (done)
+      const now = new Date('2026-02-12T15:00:00Z');
+      expect(computeBandState(5.5, now)).toBe('done');
+    });
   });
 
   describe('computeAllBands', () => {
-    it('returns 27 bands (UTC-12 to UTC+14)', () => {
+    it('returns 38 bands (integers + demi-heures)', () => {
       const bands = computeAllBands(new Date('2026-02-12T12:00:00Z'));
-      expect(bands).toHaveLength(27);
+      expect(bands).toHaveLength(38);
     });
 
     it('has offsets from -12 to +14', () => {
       const bands = computeAllBands(new Date('2026-02-12T12:00:00Z'));
       expect(bands[0].offset).toBe(-12);
-      expect(bands[26].offset).toBe(14);
+      expect(bands[bands.length - 1].offset).toBe(14);
     });
 
     it('always has at least one active band', () => {

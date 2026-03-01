@@ -8,18 +8,26 @@ function getTodayKey(): string {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 }
 
+function getYesterdayKey(): string {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 function getLocalTzOffset(): number {
-  return -Math.round(new Date().getTimezoneOffset() / 60);
+  return -(new Date().getTimezoneOffset() / 60);
 }
 
 let dotCounter = 0;
 
 export function useParticipation() {
   const todayKey = getTodayKey();
+  const yesterdayKey = getYesterdayKey();
   const tzOffset = getLocalTzOffset();
 
   const [totalCount, setTotalCount] = useState(0);
   const [myTzCount, setMyTzCount] = useState(0);
+  const [yesterdayCount, setYesterdayCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [hasParticipatedToday] = useState(() =>
     localStorage.getItem(STORAGE_KEYS.PARTICIPATED_PREFIX + todayKey) === '1'
@@ -44,13 +52,15 @@ export function useParticipation() {
       }
 
       try {
-        const [totalRes, tzRes] = await Promise.all([
+        const [totalRes, tzRes, yesterdayRes] = await Promise.all([
           supabase.rpc('get_participation_count', { target_date: todayKey }),
           supabase.rpc('get_participation_count', { target_date: todayKey, target_tz: tzOffset }),
+          supabase.rpc('get_participation_count', { target_date: yesterdayKey }),
         ]);
 
         if (totalRes.data != null) setTotalCount(Number(totalRes.data));
         if (tzRes.data != null) setMyTzCount(Number(tzRes.data));
+        if (yesterdayRes.data != null) setYesterdayCount(Number(yesterdayRes.data));
       } catch {
         // Silently fail — counts stay at 0
       }
@@ -58,7 +68,7 @@ export function useParticipation() {
     }
 
     fetchCounts();
-  }, [todayKey, tzOffset]);
+  }, [todayKey, yesterdayKey, tzOffset]);
 
   // Subscribe to realtime broadcast
   useEffect(() => {
@@ -120,5 +130,5 @@ export function useParticipation() {
     setMyTzCount(prev => prev + 1);
   }, [todayKey, tzOffset, addDot]);
 
-  return { submit, totalCount, myTzCount, isLoading, hasParticipatedToday, dots };
+  return { submit, totalCount, myTzCount, yesterdayCount, isLoading, hasParticipatedToday, dots };
 }

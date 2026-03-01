@@ -15,7 +15,7 @@ function makeBands(doneCount: number, activeCount: number): TimezoneBand[] {
   for (let i = 0; i < activeCount; i++) {
     bands.push({ offset: offset++, state: 'active', participantCount: 50 });
   }
-  while (bands.length < 27) {
+  while (bands.length < 38) {
     bands.push({ offset: offset++, state: 'future', participantCount: 0 });
   }
   return bands;
@@ -33,28 +33,32 @@ describe('computeNarrative (FR)', () => {
   });
 
   it('returns "half the world" narrative around 50%', () => {
-    const result = computeNarrative(makeBands(12, 1), narrativesFr, citiesFr);
+    // 16/38 = 42% → < 0.5 → waveHalf
+    const result = computeNarrative(makeBands(16, 1), narrativesFr, citiesFr);
     expect(result.headline).toContain('moitié');
   });
 
   it('returns "Europe/Africa" narrative around 70%', () => {
-    const result = computeNarrative(makeBands(17, 1), narrativesFr, citiesFr);
+    // 24/38 = 63% → < 0.7 → waveEuropeAfrica
+    const result = computeNarrative(makeBands(24, 1), narrativesFr, citiesFr);
     expect(result.headline).toContain('Europe');
   });
 
   it('returns "Americas" narrative around 80%', () => {
-    const result = computeNarrative(makeBands(22, 1), narrativesFr, citiesFr);
+    // 30/38 = 79% → < 0.9 → waveAmericas
+    const result = computeNarrative(makeBands(30, 1), narrativesFr, citiesFr);
     expect(result.headline).toContain('Amériques');
   });
 
   it('returns "tour du monde" when wave is complete', () => {
-    const result = computeNarrative(makeBands(25, 1), narrativesFr, citiesFr);
+    // 35/38 = 92% → >= 0.9 → waveComplete
+    const result = computeNarrative(makeBands(35, 1), narrativesFr, citiesFr);
     expect(result.headline).toContain('tour du monde');
   });
 
   it('always returns headline and detail', () => {
-    for (let done = 0; done <= 26; done++) {
-      const bands = makeBands(done, done < 27 ? 1 : 0);
+    for (let done = 0; done <= 37; done++) {
+      const bands = makeBands(done, done < 38 ? 1 : 0);
       const result = computeNarrative(bands, narrativesFr, citiesFr);
       expect(result.headline).toBeTruthy();
       expect(result.detail).toBeTruthy();
@@ -69,7 +73,8 @@ describe('computeNarrative (EN)', () => {
   });
 
   it('returns English headline for complete wave', () => {
-    const result = computeNarrative(makeBands(25, 1), narrativesEn, citiesEn);
+    // 35/38 = 92% → >= 0.9 → waveComplete
+    const result = computeNarrative(makeBands(35, 1), narrativesEn, citiesEn);
     expect(result.headline).toContain('circled the globe');
   });
 });

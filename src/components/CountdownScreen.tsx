@@ -22,7 +22,7 @@ export default function CountdownScreen({ actionText, onReady, participation }: 
   const { bands, waveCenterLng } = useTimezoneWave();
   const narrative = useWaveNarrative(bands);
   const { t } = useLocale();
-  const { totalCount, dots } = participation;
+  const { totalCount, yesterdayCount, dots } = participation;
   const simDots = useSimulatedDots(SIM_ENABLED);
   const allDots = SIM_ENABLED ? [...dots, ...simDots] : dots;
 
@@ -68,6 +68,11 @@ export default function CountdownScreen({ actionText, onReady, participation }: 
           {totalCount > 0 && (
             <p className="text-sm text-indigo-300/50 font-light mb-2">
               {totalCount} {t('result.participantLabel')}
+            </p>
+          )}
+          {totalCount === 0 && yesterdayCount > 0 && (
+            <p className="text-sm text-indigo-300/40 font-light mb-2">
+              {t('countdown.yesterday', { count: yesterdayCount })}
             </p>
           )}
           <p className="text-base text-amber-200/70 font-light">

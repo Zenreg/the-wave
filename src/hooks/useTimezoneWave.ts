@@ -1,17 +1,21 @@
 import { useState, useEffect } from 'react';
 import type { TimezoneBand, TzBandState } from '../types';
 
-/** All integer UTC offsets from -12 to +14 */
-const OFFSETS = Array.from({ length: 27 }, (_, i) => i - 12);
+/** All real-world UTC offsets (integers + demi-heures) */
+const OFFSETS = [
+  -12, -11, -10, -9.5, -9, -8, -7, -6, -5, -4, -3.5, -3, -2, -1,
+  0, 1, 2, 3, 3.5, 4, 4.5, 5, 5.5, 5.75, 6, 6.5, 7, 8, 8.75, 9, 9.5, 10, 10.5, 11, 12, 12.75, 13, 14,
+];
 
 export function computeBandState(offset: number, now: Date): TzBandState {
   const utcHour = now.getUTCHours();
   const utcMinute = now.getUTCMinutes();
 
-  // What hour is it in this timezone?
-  const localHour = ((utcHour + offset) % 24 + 24) % 24;
-  // For integer offsets, local minute = UTC minute
-  const localMinute = utcMinute;
+  // Temps local total en minutes depuis minuit
+  const utcTotalMinutes = utcHour * 60 + utcMinute;
+  const localTotalMinutes = ((utcTotalMinutes + offset * 60) % 1440 + 1440) % 1440;
+  const localHour = Math.floor(localTotalMinutes / 60);
+  const localMinute = localTotalMinutes % 60;
 
   // Within the ±5min action window (19:55–20:05)
   const inWindow =

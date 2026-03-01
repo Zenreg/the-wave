@@ -10,6 +10,7 @@ export interface TranslationKeys {
   'countdown.timerAria': string;
   'countdown.todayAction': string;
   'countdown.localTime': string;
+  'countdown.yesterday': string;
 
   // ActionScreen
   'action.durationDebug': string;

@@ -8,6 +8,7 @@ const fr: TranslationKeys = {
   'countdown.timerAria': '{hours} heures {minutes} minutes {seconds} secondes',
   'countdown.todayAction': 'Action du jour',
   'countdown.localTime': '20h00 \u2014 heure locale',
+  'countdown.yesterday': 'Hier, {count} personnes ont particip\u00e9',
 
   'action.durationDebug': '5 secondes (debug)',
   'action.duration': '60 secondes, ensemble',
