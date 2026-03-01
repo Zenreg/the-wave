@@ -10,7 +10,7 @@ function lngToX(lng: number, width: number): number {
 }
 
 export default function TimezoneWave({ waveCenterLng, width, height }: TimezoneWaveProps) {
-  const bandWidthDeg = 15; // 1 hour = 15°
+  const bandWidthDeg = 25; // ~1h40 — couvre visuellement le fuseau horaire actif
   const bandWidthPx = (bandWidthDeg / 360) * width;
 
   const leftLng = waveCenterLng - bandWidthDeg / 2;

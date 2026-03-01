@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useActionTimer } from '../hooks/useActionTimer';
 import { useLocale } from '../i18n';
 import type { GeoPoint } from '../types';
@@ -23,13 +23,15 @@ export default function ActionScreen({ actionText, onComplete, debug = false, pa
     if (hasParticipatedToday && !debug) onComplete();
   }, [hasParticipatedToday, debug, onComplete]);
 
+  const hasSubmittedRef = useRef(false);
   useEffect(() => {
-    if (hasFinished) {
+    if (hasFinished && !hasSubmittedRef.current) {
+      hasSubmittedRef.current = true;
       submit(geoPoint).then(onComplete);
     }
   }, [hasFinished, submit, onComplete, geoPoint]);
 
-  const timerTotal = debug ? 5 : 60;
+  const timerTotal = debug ? 5 : 30;
 
   return (
     <div className="screen screen-enter">

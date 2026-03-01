@@ -7,7 +7,7 @@ interface ActionTimerState {
   start: () => void;
 }
 
-const DURATION = 60;
+const DURATION = 30;
 const DEBUG_DURATION = 5;
 
 export function useActionTimer(debug = false): ActionTimerState {
