@@ -8,7 +8,7 @@ import WorldMap from './WorldMap';
 import BreathingOrb from './BreathingOrb';
 
 // Simulation toujours active pour le moment (on retirera après test)
-const SIM_ENABLED = true;
+const SIM_ENABLED = false;
 
 interface ResultScreenProps {
   actionText?: string;

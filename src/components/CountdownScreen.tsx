@@ -9,7 +9,7 @@ import BreathingOrb from './BreathingOrb';
 import WorldMap from './WorldMap';
 
 // Simulation toujours active pour le moment (on retirera après test)
-const SIM_ENABLED = true;
+const SIM_ENABLED = false;
 
 interface CountdownScreenProps {
   actionText?: string;
