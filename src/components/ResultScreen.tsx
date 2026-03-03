@@ -10,15 +10,14 @@ import WorldMap from './WorldMap';
 import BreathingOrb from './BreathingOrb';
 
 interface ResultScreenProps {
-  actionText?: string;
   participation: ReturnType<typeof useParticipation>;
   myPoint?: GeoPoint;
 }
 
 const SHARE_URL = 'https://wave.30jourspourchanger.com';
 
-export default function ResultScreen({ actionText, participation, myPoint }: ResultScreenProps) {
-  const { totalCount, myTzCount, yesterdayCount, dots } = participation;
+export default function ResultScreen({ participation, myPoint }: ResultScreenProps) {
+  const { totalCount, myTzCount, dots } = participation;
   const { bands, waveCenterLng } = useTimezoneWave(myPoint?.lng);
   const narrative = useWaveNarrative(bands);
   const { t, formatNumber } = useLocale();
@@ -53,57 +52,44 @@ export default function ResultScreen({ actionText, participation, myPoint }: Res
   };
 
   return (
-    <div className="screen screen-enter overflow-y-auto">
+    <div className="screen screen-enter flex-col justify-between py-6 sm:py-10">
       <BreathingOrb size="lg" color="amber" />
 
-      <div className="relative z-10 flex flex-col items-center gap-8 py-12 w-full max-w-3xl">
-        {actionText && (
-          <p className="text-lg text-slate-400 font-light italic text-center">
-            "{actionText}"
-          </p>
-        )}
-
+      {/* Compteur + infos en haut, compact */}
+      <div className="relative z-10 text-center">
         <ParticipantCounter
           targetCount={totalCount}
           label={t('result.participantLabel')}
         />
-
         {totalCount <= 50 && (
-          <p className="text-sm text-amber-300/70 font-light tracking-wide">
+          <p className="text-xs text-amber-300/70 font-light tracking-wide mt-1">
             {t('result.pioneerLabel')}
           </p>
         )}
-
         {myTzCount > 0 && (
-          <p className="text-sm text-indigo-300/60 font-light">
+          <p className="text-xs text-indigo-300/50 font-light mt-1">
             {t('result.nearYou', { count: formatNumber(myTzCount) })}
           </p>
         )}
+      </div>
 
-        {yesterdayCount > 0 && (
-          <p className="text-sm text-slate-500 font-light">
-            {t('result.yesterday', { count: formatNumber(yesterdayCount) })}
-          </p>
-        )}
-
-        {/* Wave narrative */}
-        <div className="text-center mt-2">
-          <p className="text-base text-amber-200/70 font-light">
-            {narrative.headline}
-          </p>
-          <p className="text-sm text-slate-400/60 font-light mt-1 max-w-md">
-            {narrative.detail}
-          </p>
-        </div>
-
-        <div className="w-full mt-4">
+      {/* La carte : occupe tout l'espace central */}
+      <div className="relative z-10 w-full flex-1 flex items-center px-2">
+        <div className="w-full max-w-3xl mx-auto">
           <WorldMap waveCenterLng={waveCenterLng} dots={dots} myPoint={myPoint} />
         </div>
+      </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+      {/* Narrative + boutons en bas, compact */}
+      <div className="relative z-10 text-center">
+        <p className="text-sm text-amber-200/70 font-light">
+          {narrative.headline}
+        </p>
+
+        <div className="flex items-center justify-center gap-3 mt-3">
           <button
             onClick={handleShare}
-            className="px-6 py-2.5 rounded-full border border-indigo-500/30 text-sm text-indigo-300 font-light tracking-wide hover:bg-indigo-500/10 transition-colors"
+            className="px-5 py-2 rounded-full border border-indigo-500/30 text-xs text-indigo-300 font-light tracking-wide hover:bg-indigo-500/10 transition-colors"
           >
             {copied ? t('result.linkCopied') : t('result.share')}
           </button>
@@ -112,14 +98,14 @@ export default function ResultScreen({ actionText, participation, myPoint }: Res
             <button
               onClick={handleReminder}
               disabled={pushStatus === 'subscribed'}
-              className="px-6 py-2.5 rounded-full border border-amber-500/30 text-sm text-amber-300/80 font-light tracking-wide hover:bg-amber-500/10 transition-colors disabled:opacity-50"
+              className="px-5 py-2 rounded-full border border-amber-500/30 text-xs text-amber-300/80 font-light tracking-wide hover:bg-amber-500/10 transition-colors disabled:opacity-50"
             >
               {pushStatus === 'subscribed' ? t('result.reminderEnabled') : t('result.enableReminder')}
             </button>
           )}
         </div>
 
-        <p className="text-sm text-slate-600 font-light mt-4">
+        <p className="text-xs text-slate-600 font-light mt-2">
           {t('result.comeBack')}
         </p>
       </div>

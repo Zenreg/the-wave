@@ -69,7 +69,6 @@ function AppInner() {
 
       {screen === 'result' && (
         <ResultScreen
-          actionText={action?.actionText}
           participation={participation}
           myPoint={geoPoint}
         />

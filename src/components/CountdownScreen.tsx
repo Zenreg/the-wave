@@ -30,15 +30,16 @@ export default function CountdownScreen({ actionText, onReady, participation, us
   const pad = (n: number) => String(n).padStart(2, '0');
 
   return (
-    <div className="screen screen-enter overflow-y-auto">
+    <div className="screen screen-enter flex-col justify-between py-6 sm:py-10">
       <BreathingOrb size="md" color="indigo" />
 
-      <div className="relative z-10 flex flex-col items-center gap-6 py-12 w-full max-w-3xl">
-        <p className="text-sm uppercase tracking-[0.25em] text-slate-500 font-light">
+      {/* Timer + action en haut, compact */}
+      <div className="relative z-10 text-center">
+        <p className="text-xs uppercase tracking-[0.25em] text-slate-500 font-light mb-2">
           {t('countdown.nextMoment')}
         </p>
 
-        <div className="text-6xl sm:text-8xl font-extralight tracking-widest text-white tabular-nums"
+        <div className="text-5xl sm:text-7xl font-extralight tracking-widest text-white tabular-nums"
              aria-label={t('countdown.timerAria', { hours, minutes, seconds })}
              role="timer"
         >
@@ -50,42 +51,35 @@ export default function CountdownScreen({ actionText, onReady, participation, us
         </div>
 
         {actionText && (
-          <div className="max-w-md mx-auto text-center">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-600 mb-3">
-              {t('countdown.todayAction')}
-            </p>
-            <p className="text-lg text-slate-300 font-light leading-relaxed italic">
-              "{actionText}"
-            </p>
-          </div>
+          <p className="text-sm text-slate-400 font-light italic mt-3">
+            "{actionText}"
+          </p>
         )}
+      </div>
 
-        {/* Wave narrative + participant count */}
-        <div className="text-center mt-2">
-          {totalCount > 0 && (
-            <p className="text-sm text-indigo-300/50 font-light mb-2">
-              {totalCount} {t('result.participantLabel')}
-            </p>
-          )}
-          {totalCount === 0 && yesterdayCount > 0 && (
-            <p className="text-sm text-indigo-300/40 font-light mb-2">
-              {t('countdown.yesterday', { count: yesterdayCount })}
-            </p>
-          )}
-          <p className="text-base text-amber-200/70 font-light">
-            {narrative.headline}
-          </p>
-          <p className="text-sm text-slate-400/60 font-light mt-1 max-w-md">
-            {narrative.detail}
-          </p>
-        </div>
-
-        {/* Live world map with wave */}
-        <div className="w-full mt-2">
+      {/* La carte : occupe tout l'espace central */}
+      <div className="relative z-10 w-full flex-1 flex items-center px-2">
+        <div className="w-full max-w-3xl mx-auto">
           <WorldMap waveCenterLng={waveCenterLng} dots={dots} myPoint={myPoint} />
         </div>
+      </div>
 
-        <p className="text-sm text-slate-600 font-light">
+      {/* Narrative + infos en bas, compact */}
+      <div className="relative z-10 text-center">
+        {totalCount > 0 && (
+          <p className="text-xs text-indigo-300/50 font-light mb-1">
+            {totalCount} {t('result.participantLabel')}
+          </p>
+        )}
+        {totalCount === 0 && yesterdayCount > 0 && (
+          <p className="text-xs text-indigo-300/40 font-light mb-1">
+            {t('countdown.yesterday', { count: yesterdayCount })}
+          </p>
+        )}
+        <p className="text-sm text-amber-200/70 font-light">
+          {narrative.headline}
+        </p>
+        <p className="text-xs text-slate-600 font-light mt-1">
           {t('countdown.localTime')}
         </p>
       </div>
