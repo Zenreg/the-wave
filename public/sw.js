@@ -1,13 +1,12 @@
-const CACHE_NAME = 'thewave-v1';
+const CACHE_NAME = 'thewave-v2';
 const STATIC_ASSETS = [
-  '/',
   '/manifest.json',
   '/favicon.svg',
   '/icon-192.png',
   '/icon-512.png',
 ];
 
-// Installation : cache des assets statiques
+// Installation : cache des assets statiques (pas le HTML)
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
@@ -25,18 +24,26 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch : network-first pour API, cache-first pour assets
+// Fetch : network-first pour HTML et API, cache-first pour assets
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Network-first pour Supabase et les requêtes API
+  // Network-first pour Supabase
   if (url.hostname.includes('supabase.co')) {
     event.respondWith(fetch(request));
     return;
   }
 
-  // Cache-first pour les assets statiques
+  // Network-first pour les pages HTML (navigation)
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request).catch(() => caches.match('/'))
+    );
+    return;
+  }
+
+  // Cache-first pour les assets statiques (JS, CSS, images)
   event.respondWith(
     caches.match(request).then((cached) => {
       if (cached) return cached;

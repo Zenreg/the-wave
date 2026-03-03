@@ -14,7 +14,7 @@ interface ResultScreenProps {
   myPoint?: GeoPoint;
 }
 
-const SHARE_URL = 'https://wave.30jourspourchanger.com';
+const SHARE_URL = 'https://jointhewave.fr';
 
 export default function ResultScreen({ participation, myPoint }: ResultScreenProps) {
   const { totalCount, myTzCount, dots } = participation;
