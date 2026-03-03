@@ -17,17 +17,17 @@ export function computeBandState(offset: number, now: Date): TzBandState {
   const localHour = Math.floor(localTotalMinutes / 60);
   const localMinute = localTotalMinutes % 60;
 
-  // Within the ±5min action window (19:55–20:05)
+  // Within the 1h action window (19:30–20:30)
   const inWindow =
-    (localHour === 19 && localMinute >= 55) ||
-    (localHour === 20 && localMinute <= 5);
+    (localHour === 19 && localMinute >= 30) ||
+    (localHour === 20 && localMinute <= 30);
 
   if (inWindow) {
     return 'active';
   }
 
-  // Past the window today (20:06–23:59) or past midnight (0:00–7:59)
-  if (localHour === 20 ? localMinute > 5 : (localHour > 20 || localHour < 8)) {
+  // Past the window today (20:31–23:59) or past midnight (0:00–7:59)
+  if (localHour === 20 ? localMinute > 30 : (localHour > 20 || localHour < 8)) {
     return 'done';
   }
 
@@ -42,16 +42,18 @@ export function computeAllBands(now: Date): TimezoneBand[] {
   }));
 }
 
-/** Longitude where it's currently 20:00, moving westward continuously */
-export function computeWaveCenterLng(now: Date): number {
+/**
+ * Longitude where it's currently 20:00, moving westward continuously.
+ * correction = userLng - userOffset * 15 → aligne la barre sur la position
+ * réelle de l'utilisateur à 20h heure civile (pas heure solaire).
+ */
+export function computeWaveCenterLng(now: Date, correction = 0): number {
   const utcH = now.getUTCHours();
   const utcM = now.getUTCMinutes();
   const utcS = now.getUTCSeconds();
   const utcDecimal = utcH + utcM / 60 + utcS / 3600;
 
-  // UTC offset where local time = 20:00 → offset = 20 - utcDecimal
-  // Longitude = offset * 15°
-  let lng = (20 - utcDecimal) * 15;
+  let lng = (20 - utcDecimal) * 15 + correction;
 
   // Normalize to [-180, 180]
   while (lng > 180) lng -= 360;
@@ -59,18 +61,23 @@ export function computeWaveCenterLng(now: Date): number {
   return lng;
 }
 
-export function useTimezoneWave() {
+export function useTimezoneWave(userLng?: number) {
+  // Correction : aligne la barre sur la position réelle (pas solaire)
+  const correction = userLng != null
+    ? userLng - (-(new Date().getTimezoneOffset()) / 60) * 15
+    : 0;
+
   const [bands, setBands] = useState<TimezoneBand[]>(() => computeAllBands(new Date()));
-  const [waveCenterLng, setWaveCenterLng] = useState<number>(() => computeWaveCenterLng(new Date()));
+  const [waveCenterLng, setWaveCenterLng] = useState<number>(() => computeWaveCenterLng(new Date(), correction));
 
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
       setBands(computeAllBands(now));
-      setWaveCenterLng(computeWaveCenterLng(now));
+      setWaveCenterLng(computeWaveCenterLng(now, correction));
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [correction]);
 
   const updateParticipantCount = (tzOffset: number, count: number) => {
     setBands(prev => prev.map(band =>

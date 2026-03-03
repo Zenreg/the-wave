@@ -71,13 +71,13 @@ function localHourAt(lng: number, now: Date): number {
 /** Is this city's local time past the 20h window? (done = behind the wave) */
 function isDone(lng: number, now: Date): boolean {
   const h = localHourAt(lng, now);
-  return h > 20.083; // only evening (20:05–23:59), NOT past midnight
+  return h > 20.5; // only evening (20:30–23:59), NOT past midnight
 }
 
 /** Is this city currently in the active 20h window? */
 function isActive(lng: number, now: Date): boolean {
   const h = localHourAt(lng, now);
-  return h >= 19.917 && h <= 20.083; // 19:55–20:05
+  return h >= 19.5 && h <= 20.5; // 19:30–20:30
 }
 
 /** Small random offset to simulate multiple people in a city */

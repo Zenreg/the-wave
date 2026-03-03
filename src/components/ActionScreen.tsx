@@ -9,19 +9,18 @@ import BreathingOrb from './BreathingOrb';
 interface ActionScreenProps {
   actionText: string;
   onComplete: () => void;
-  debug?: boolean;
   participation: ReturnType<typeof useParticipation>;
   geoPoint: GeoPoint;
 }
 
-export default function ActionScreen({ actionText, onComplete, debug = false, participation, geoPoint }: ActionScreenProps) {
-  const { secondsLeft, isRunning, hasFinished, start } = useActionTimer(debug);
+export default function ActionScreen({ actionText, onComplete, participation, geoPoint }: ActionScreenProps) {
+  const { secondsLeft, isRunning, hasFinished, start } = useActionTimer();
   const { submit, hasParticipatedToday } = participation;
   const { t } = useLocale();
 
   useEffect(() => {
-    if (hasParticipatedToday && !debug) onComplete();
-  }, [hasParticipatedToday, debug, onComplete]);
+    if (hasParticipatedToday) onComplete();
+  }, [hasParticipatedToday, onComplete]);
 
   const hasSubmittedRef = useRef(false);
   useEffect(() => {
@@ -30,8 +29,6 @@ export default function ActionScreen({ actionText, onComplete, debug = false, pa
       submit(geoPoint).then(onComplete);
     }
   }, [hasFinished, submit, onComplete, geoPoint]);
-
-  const timerTotal = debug ? 5 : 30;
 
   return (
     <div className="screen screen-enter">
@@ -45,7 +42,7 @@ export default function ActionScreen({ actionText, onComplete, debug = false, pa
             </p>
 
             <p className="text-sm text-slate-500 font-light">
-              {debug ? t('action.durationDebug') : t('action.duration')}
+              {t('action.duration')}
             </p>
 
             <button
@@ -68,7 +65,7 @@ export default function ActionScreen({ actionText, onComplete, debug = false, pa
               {actionText}
             </p>
 
-            <CircularTimer secondsLeft={secondsLeft} totalSeconds={timerTotal} />
+            <CircularTimer secondsLeft={secondsLeft} totalSeconds={30} />
           </>
         )}
       </div>

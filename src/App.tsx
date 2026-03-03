@@ -7,7 +7,6 @@ import LandingScreen from './components/LandingScreen';
 import CountdownScreen from './components/CountdownScreen';
 import ActionScreen from './components/ActionScreen';
 import ResultScreen from './components/ResultScreen';
-import DebugPanel from './components/DebugPanel';
 import LocaleToggle from './components/LocaleToggle';
 import AudioToggle from './components/AudioToggle';
 import { useSignature } from './hooks/useSignature';
@@ -21,8 +20,6 @@ import citiesFr from './i18n/cities.fr';
 import citiesEn from './i18n/cities.en';
 import fallbackActionsFr from './i18n/fallbackActions.fr';
 import fallbackActionsEn from './i18n/fallbackActions.en';
-
-const IS_DEV = import.meta.env.DEV;
 
 // Integrity check on mount (production only)
 verifyIntegrity([fr, en, narrativesFr, narrativesEn, citiesFr, citiesEn, fallbackActionsFr, fallbackActionsEn])
@@ -56,6 +53,7 @@ function AppInner() {
           actionText={action?.actionText}
           onReady={() => goToScreen('action')}
           participation={participation}
+          userLng={geoPoint.lng}
         />
       )}
 
@@ -63,7 +61,6 @@ function AppInner() {
         <ActionScreen
           actionText={action?.actionText ?? t('action.fallback')}
           onComplete={() => goToScreen('result')}
-          debug={IS_DEV}
           participation={participation}
           geoPoint={geoPoint}
         />
@@ -73,14 +70,12 @@ function AppInner() {
         <ResultScreen
           actionText={action?.actionText}
           participation={participation}
+          myPoint={geoPoint}
         />
       )}
 
       <LocaleToggle audioButton={<AudioToggle muted={muted} onToggle={toggleMute} />} />
 
-      {(IS_DEV || sig.debug) && (
-        <DebugPanel currentScreen={screen} onNavigate={goToScreen} />
-      )}
     </>
   );
 }

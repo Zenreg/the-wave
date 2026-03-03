@@ -1,23 +1,24 @@
 import { useTimezoneWave } from '../hooks/useTimezoneWave';
 import { useWaveNarrative } from '../hooks/useWaveNarrative';
 import { useLocale } from '../i18n';
+import type { GeoPoint } from '../types';
 import type { useParticipation } from '../hooks/useParticipation';
 import { useSimulatedDots } from '../hooks/useSimulatedDots';
 import ParticipantCounter from './ParticipantCounter';
 import WorldMap from './WorldMap';
 import BreathingOrb from './BreathingOrb';
 
-// Simulation toujours active pour le moment (on retirera après test)
-const SIM_ENABLED = false;
+const SIM_ENABLED = true;
 
 interface ResultScreenProps {
   actionText?: string;
   participation: ReturnType<typeof useParticipation>;
+  myPoint?: GeoPoint;
 }
 
-export default function ResultScreen({ actionText, participation }: ResultScreenProps) {
-  const { totalCount, myTzCount, dots } = participation;
-  const { bands, waveCenterLng } = useTimezoneWave();
+export default function ResultScreen({ actionText, participation, myPoint }: ResultScreenProps) {
+  const { totalCount, myTzCount, yesterdayCount, dots } = participation;
+  const { bands, waveCenterLng } = useTimezoneWave(myPoint?.lng);
   const narrative = useWaveNarrative(bands);
   const { t, formatNumber } = useLocale();
   const simDots = useSimulatedDots(SIM_ENABLED);
@@ -45,6 +46,12 @@ export default function ResultScreen({ actionText, participation }: ResultScreen
           </p>
         )}
 
+        {yesterdayCount > 0 && (
+          <p className="text-sm text-slate-500 font-light">
+            {t('result.yesterday', { count: formatNumber(yesterdayCount) })}
+          </p>
+        )}
+
         {/* Wave narrative */}
         <div className="text-center mt-2">
           <p className="text-base text-amber-200/70 font-light">
@@ -56,7 +63,7 @@ export default function ResultScreen({ actionText, participation }: ResultScreen
         </div>
 
         <div className="w-full mt-4">
-          <WorldMap waveCenterLng={waveCenterLng} dots={allDots} />
+          <WorldMap waveCenterLng={waveCenterLng} dots={allDots} myPoint={myPoint} />
         </div>
 
         <p className="text-sm text-slate-600 font-light mt-4">

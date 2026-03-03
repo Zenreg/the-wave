@@ -1,11 +1,12 @@
 import { useLocale } from '../i18n';
-import type { MapDot } from '../types';
+import type { MapDot, GeoPoint } from '../types';
 import { WORLD_LAND_PATH } from '../data/worldMapPath';
 import TimezoneWave from './TimezoneWave';
 
 interface WorldMapProps {
   waveCenterLng: number;
   dots?: MapDot[];
+  myPoint?: GeoPoint;
 }
 
 const SVG_WIDTH = 800;
@@ -18,12 +19,10 @@ function geoToSvg(lat: number, lng: number): { x: number; y: number } {
   };
 }
 
-export default function WorldMap({ waveCenterLng, dots = [] }: WorldMapProps) {
+export default function WorldMap({ waveCenterLng, dots = [], myPoint }: WorldMapProps) {
   const { t } = useLocale();
   const now = new Date();
   const utcDecimal = now.getUTCHours() + now.getUTCMinutes() / 60 + now.getUTCSeconds() / 3600;
-
-  let visibleCount = 0;
 
   return (
     <div className="w-full aspect-[2/1] relative rounded-xl overflow-hidden">
@@ -58,35 +57,36 @@ export default function WorldMap({ waveCenterLng, dots = [] }: WorldMapProps) {
             // Local solar time at this dot's longitude
             const localHour = ((utcDecimal + dot.point.lng / 15) % 24 + 24) % 24;
 
-            // Only show dots where it's between 19:55 and midnight (wave passed or passing)
-            if (localHour < 19.917) return null;
+            // Only show dots where it's between 19:30 and midnight (wave passed or passing)
+            if (localHour < 19.5) return null;
 
             const { x, y } = geoToSvg(dot.point.lat, dot.point.lng);
-            const inBand = localHour <= 20.083;
-            visibleCount++;
 
             return (
               <circle
                 key={dot.id}
-                cx={x} cy={y} r={1}
-                fill={inBand ? '#fbbf24' : '#fbbf24'}
-                opacity={inBand ? 0.9 : 0.05}
+                cx={x} cy={y} r={0.8}
+                fill="#fbbf24"
+                opacity={0.7}
+                className="map-dot-core"
               />
             );
           })}
         </g>
+
+        {/* Mon point lumineux — petit, pulsant doucement */}
+        {myPoint && (() => {
+          const { x, y } = geoToSvg(myPoint.lat, myPoint.lng);
+          return (
+            <g>
+              <circle cx={x} cy={y} r={4} fill="#fbbf24" opacity={0.06} className="my-dot-halo" />
+              <circle cx={x} cy={y} r={2} fill="#fbbf24" opacity={0.15} className="my-dot-glow" />
+              <circle cx={x} cy={y} r={1} fill="#fbbf24" opacity={0.9} className="my-dot-core" />
+            </g>
+          );
+        })()}
       </svg>
 
-      {visibleCount > 0 && (
-        <div className="absolute bottom-3 right-3">
-          <span
-            key={visibleCount}
-            className="text-sm text-amber-300/50 font-light tabular-nums animate-fade-in"
-          >
-            {visibleCount}
-          </span>
-        </div>
-      )}
     </div>
   );
 }

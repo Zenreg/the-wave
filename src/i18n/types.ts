@@ -3,6 +3,9 @@ export type Locale = 'fr' | 'en';
 export interface TranslationKeys {
   // LandingScreen
   'landing.tagline': string;
+  'landing.concept1': string;
+  'landing.concept2': string;
+  'landing.concept3': string;
   'landing.enter': string;
 
   // CountdownScreen
@@ -13,7 +16,6 @@ export interface TranslationKeys {
   'countdown.yesterday': string;
 
   // ActionScreen
-  'action.durationDebug': string;
   'action.duration': string;
   'action.cta': string;
   'action.fallback': string;
@@ -21,6 +23,7 @@ export interface TranslationKeys {
   // ResultScreen
   'result.participantLabel': string;
   'result.nearYou': string;
+  'result.yesterday': string;
   'result.comeBack': string;
 
   // CircularTimer
@@ -29,8 +32,6 @@ export interface TranslationKeys {
   // WorldMap
   'map.aria': string;
 
-  // DebugPanel
-  'debug.keyboardHint': string;
 }
 
 export interface NarrativeTemplates {

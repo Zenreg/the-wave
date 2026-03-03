@@ -69,9 +69,15 @@ describe('useTimezoneWave', () => {
       expect(computeBandState(5.5, now)).toBe('future');
     });
 
-    it('UTC+5.5 returns "done" après 20h', () => {
-      // UTC 15:00 → offset +5.5 → local 20:30 (done)
+    it('UTC+5.5 returns "active" at local 20:30 (fin de fenêtre)', () => {
+      // UTC 15:00 → offset +5.5 → local 20:30 (encore actif, fenêtre 19:30-20:30)
       const now = new Date('2026-02-12T15:00:00Z');
+      expect(computeBandState(5.5, now)).toBe('active');
+    });
+
+    it('UTC+5.5 returns "done" après 20:30', () => {
+      // UTC 15:01 → offset +5.5 → local 20:31 (done)
+      const now = new Date('2026-02-12T15:01:00Z');
       expect(computeBandState(5.5, now)).toBe('done');
     });
   });

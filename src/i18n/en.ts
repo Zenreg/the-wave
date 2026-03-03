@@ -1,29 +1,31 @@
 import type { TranslationKeys } from './types';
 
 const en: TranslationKeys = {
-  'landing.tagline': 'Every day at 8\u202fPM, millions of humans share the same 30-second action.',
+  'landing.tagline': 'A planetary wave to slow down.',
+  'landing.concept1': 'Every evening at 8\u202fPM, in every timezone, a wave crosses the world.',
+  'landing.concept2': 'One single action, 30\u202fseconds, millions of humans together.',
+  'landing.concept3': 'No account. No likes. Just you, and the rest of the world, at the same moment.',
   'landing.enter': 'Enter',
 
   'countdown.nextMoment': 'Next collective moment',
   'countdown.timerAria': '{hours} hours {minutes} minutes {seconds} seconds',
   'countdown.todayAction': "Today's action",
-  'countdown.localTime': '8:00\u202fPM \u2014 local time',
+  'countdown.localTime': 'The wave passes between 7:30\u202fPM and 8:30\u202fPM',
   'countdown.yesterday': 'Yesterday, {count} people participated',
 
-  'action.durationDebug': '5 seconds (debug)',
   'action.duration': '30 seconds, together',
   'action.cta': "I'm doing it",
   'action.fallback': 'Breathe deeply.',
 
   'result.participantLabel': 'humans shared this moment today',
   'result.nearYou': 'including {count} near you',
+  'result.yesterday': 'Yesterday, we were {count}',
   'result.comeBack': 'Come back tomorrow at 8\u202fPM',
 
   'timer.aria': '{seconds} seconds remaining',
 
   'map.aria': 'World map showing the participation wave by timezone',
 
-  'debug.keyboardHint': 'Keys 1-5 to navigate',
 };
 
 export default Object.freeze(en);

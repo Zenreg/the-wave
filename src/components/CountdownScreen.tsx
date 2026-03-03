@@ -8,18 +8,18 @@ import { useSimulatedDots } from '../hooks/useSimulatedDots';
 import BreathingOrb from './BreathingOrb';
 import WorldMap from './WorldMap';
 
-// Simulation toujours active pour le moment (on retirera après test)
-const SIM_ENABLED = false;
+const SIM_ENABLED = true;
 
 interface CountdownScreenProps {
   actionText?: string;
   onReady: () => void;
   participation: ReturnType<typeof useParticipation>;
+  userLng?: number;
 }
 
-export default function CountdownScreen({ actionText, onReady, participation }: CountdownScreenProps) {
+export default function CountdownScreen({ actionText, onReady, participation, userLng }: CountdownScreenProps) {
   const { hours, minutes, seconds, isReady } = useCountdown();
-  const { bands, waveCenterLng } = useTimezoneWave();
+  const { bands, waveCenterLng } = useTimezoneWave(userLng);
   const narrative = useWaveNarrative(bands);
   const { t } = useLocale();
   const { totalCount, yesterdayCount, dots } = participation;

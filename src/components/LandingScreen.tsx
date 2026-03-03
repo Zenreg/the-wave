@@ -13,13 +13,25 @@ export default function LandingScreen({ onEnter }: LandingScreenProps) {
       <BreathingOrb size="lg" color="indigo" />
 
       <div className="relative z-10 text-center max-w-lg">
-        <h1 className="text-7xl sm:text-8xl font-extralight tracking-[0.3em] glow-text mb-10">
+        <h1 className="text-7xl sm:text-8xl font-extralight tracking-[0.3em] glow-text mb-8">
           THE WAVE
         </h1>
 
-        <p className="text-lg sm:text-xl text-slate-400 leading-relaxed mb-16 font-light">
+        <p className="text-xl sm:text-2xl text-indigo-200/80 leading-relaxed mb-8 font-light">
           {t('landing.tagline')}
         </p>
+
+        <div className="space-y-3 mb-12">
+          <p className="text-base text-slate-400 leading-relaxed font-light">
+            {t('landing.concept1')}
+          </p>
+          <p className="text-base text-slate-400 leading-relaxed font-light">
+            {t('landing.concept2')}
+          </p>
+          <p className="text-sm text-slate-500 leading-relaxed font-light italic">
+            {t('landing.concept3')}
+          </p>
+        </div>
 
         <button
           onClick={onEnter}

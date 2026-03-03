@@ -8,11 +8,9 @@ interface ActionTimerState {
 }
 
 const DURATION = 30;
-const DEBUG_DURATION = 5;
 
-export function useActionTimer(debug = false): ActionTimerState {
-  const duration = debug ? DEBUG_DURATION : DURATION;
-  const [secondsLeft, setSecondsLeft] = useState(duration);
+export function useActionTimer(): ActionTimerState {
+  const [secondsLeft, setSecondsLeft] = useState(DURATION);
   const [isRunning, setIsRunning] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -20,8 +18,8 @@ export function useActionTimer(debug = false): ActionTimerState {
   const start = useCallback(() => {
     if (isRunning || hasFinished) return;
     setIsRunning(true);
-    setSecondsLeft(duration);
-  }, [isRunning, hasFinished, duration]);
+    setSecondsLeft(DURATION);
+  }, [isRunning, hasFinished]);
 
   useEffect(() => {
     if (!isRunning) return;

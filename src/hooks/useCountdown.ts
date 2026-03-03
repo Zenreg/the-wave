@@ -10,11 +10,11 @@ interface CountdownState {
   isPast: boolean;
 }
 
-/** Compute seconds until 19:55 local (start of action window) */
+/** Compute seconds until 19:30 local (start of action window — la vague arrive) */
 export function getSecondsUntilWindow(): number {
   const now = new Date();
   const target = new Date(now);
-  target.setHours(19, 55, 0, 0);
+  target.setHours(19, 30, 0, 0);
 
   if (now >= target) {
     target.setDate(target.getDate() + 1);
@@ -23,21 +23,20 @@ export function getSecondsUntilWindow(): number {
   return Math.floor((target.getTime() - now.getTime()) / 1000);
 }
 
-/** Check if current local time is within the ±5min action window (19:55–20:05) */
+/** Check if current local time is within the 1h action window (19:30–20:30) */
 export function isWithinActionWindow(): boolean {
   const now = new Date();
   const h = now.getHours();
   const m = now.getMinutes();
-  // 19:55–19:59 or 20:00–20:05
-  return (h === 19 && m >= 55) || (h === 20 && m <= 5);
+  return (h === 19 && m >= 30) || (h === 20 && m <= 30);
 }
 
-/** Check if today's action window has already passed (after 20:05) */
+/** Check if today's action window has already passed (after 20:30) */
 export function isActionWindowPast(): boolean {
   const now = new Date();
   const h = now.getHours();
   const m = now.getMinutes();
-  return h === 20 ? m > 5 : h > 20;
+  return h === 20 ? m > 30 : h > 20;
 }
 
 export function useCountdown(): CountdownState {
