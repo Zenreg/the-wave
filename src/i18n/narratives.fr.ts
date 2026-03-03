@@ -3,34 +3,34 @@ import { deepFreeze } from '../lib/integrity';
 
 const narrativesFr: NarrativeTemplates = {
   waveJustStarted: {
-    headline: 'La vague vient de naître',
-    detailWithCity: "En ce moment, quelqu'un à {city} fait exactement la même chose que toi.",
+    headline: 'La hola vient de na\u00eetre',
+    detailWithCity: 'Elle commence \u00e0 {city}.',
     detailFallback: 'Le premier fuseau horaire vient de commencer.',
   },
   waveAsia: {
-    headline: "La vague traverse l'Asie",
-    detailWithCities: "Après {lastCity}, c'est au tour de {activeCity}. La vague grandit.",
-    detailFallback: "La vague progresse vers l'ouest, un fuseau après l'autre.",
+    headline: "La hola traverse l'Asie",
+    detailWithCities: 'Apr\u00e8s {lastCity}, {activeCity} prend le relais.',
+    detailFallback: "La hola progresse vers l'ouest, un fuseau apr\u00e8s l'autre.",
   },
   waveHalf: {
-    headline: 'La moitié du monde a partagé ce moment',
+    headline: 'La moiti\u00e9 du monde a partag\u00e9 ce moment',
     detailWithCity: "Maintenant c'est {city}.{next}",
-    detailFallback: 'La vague a déjà traversé la moitié de la planète.',
-    soon: ' Bientôt, {city}.',
+    detailFallback: 'La hola a d\u00e9j\u00e0 travers\u00e9 la moiti\u00e9 de la plan\u00e8te.',
+    soon: ' Bient\u00f4t, {city}.',
   },
   waveEuropeAfrica: {
-    headline: "La vague traverse l'Europe et l'Afrique",
-    detailWithCity: "En ce moment à {city}, quelqu'un ferme les yeux comme toi.",
-    detailFallback: "L'Europe et l'Afrique rejoignent le mouvement.",
+    headline: 'Cette hola traverse le monde',
+    detailWithCity: '',
+    detailFallback: '',
   },
   waveAmericas: {
-    headline: 'La vague atteint les Amériques',
-    detailWithCity: '{city} prend le relais. La vague est presque complète.',
-    detailFallback: "Les derniers fuseaux horaires s'éveillent.",
+    headline: 'La hola atteint les Am\u00e9riques',
+    detailWithCity: '{city} prend le relais.',
+    detailFallback: 'Les derniers fuseaux horaires rejoignent le mouvement.',
   },
   waveComplete: {
-    headline: 'La vague a fait le tour du monde',
-    detail: 'En 24 heures, la Terre entière a partagé le même geste.',
+    headline: 'La hola a fait le tour du monde',
+    detail: 'En 24 heures, la Terre enti\u00e8re a partag\u00e9 le m\u00eame geste.',
   },
 };
 

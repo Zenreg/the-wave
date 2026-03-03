@@ -18,9 +18,15 @@ const fr: TranslationKeys = {
   'action.fallback': 'Respire profond\u00e9ment.',
 
   'result.participantLabel': "humains ont partag\u00e9 ce moment aujourd'hui",
+  'result.pioneerLabel': 'Tu fais partie des premiers.',
   'result.nearYou': 'dont {count} pr\u00e8s de toi',
   'result.yesterday': 'Hier, nous \u00e9tions {count}',
   'result.comeBack': 'Reviens demain \u00e0 20h',
+  'result.share': 'Partager cette hola',
+  'result.shareText': 'Je viens de participer \u00e0 la hola mondiale ! Rejoins-nous chaque jour \u00e0 20h \ud83c\udf0a',
+  'result.linkCopied': 'Lien copi\u00e9 !',
+  'result.enableReminder': 'Me rappeler chaque jour',
+  'result.reminderEnabled': 'Rappel activ\u00e9 !',
 
   'timer.aria': '{seconds} secondes restantes',
 

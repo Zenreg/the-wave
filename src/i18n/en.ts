@@ -18,9 +18,15 @@ const en: TranslationKeys = {
   'action.fallback': 'Breathe deeply.',
 
   'result.participantLabel': 'humans shared this moment today',
+  'result.pioneerLabel': 'You are among the first.',
   'result.nearYou': 'including {count} near you',
   'result.yesterday': 'Yesterday, we were {count}',
   'result.comeBack': 'Come back tomorrow at 8\u202fPM',
+  'result.share': 'Share this wave',
+  'result.shareText': 'I just joined the global wave! Join us every day at 8\u202fPM \ud83c\udf0a',
+  'result.linkCopied': 'Link copied!',
+  'result.enableReminder': 'Remind me every day',
+  'result.reminderEnabled': 'Reminder enabled!',
 
   'timer.aria': '{seconds} seconds remaining',
 

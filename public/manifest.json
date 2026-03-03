@@ -1,0 +1,22 @@
+{
+  "name": "TheWave — Une hola planétaire pour ralentir",
+  "short_name": "TheWave",
+  "description": "Chaque jour à 20h, rejoignez la hola mondiale. 30 secondes pour respirer ensemble.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#0f172a",
+  "background_color": "#020617",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -22,9 +22,9 @@ function makeBands(doneCount: number, activeCount: number): TimezoneBand[] {
 }
 
 describe('computeNarrative (FR)', () => {
-  it('returns "wave just started" when few bands are done', () => {
+  it('returns "hola just started" when few bands are done', () => {
     const result = computeNarrative(makeBands(1, 1), narrativesFr, citiesFr);
-    expect(result.headline).toBe('La vague vient de naître');
+    expect(result.headline).toBe('La hola vient de na\u00eetre');
   });
 
   it('returns "Asia" narrative for early progress', () => {
@@ -38,10 +38,10 @@ describe('computeNarrative (FR)', () => {
     expect(result.headline).toContain('moitié');
   });
 
-  it('returns "Europe/Africa" narrative around 70%', () => {
+  it('returns "hola traverse le monde" narrative around 70%', () => {
     // 24/38 = 63% → < 0.7 → waveEuropeAfrica
     const result = computeNarrative(makeBands(24, 1), narrativesFr, citiesFr);
-    expect(result.headline).toContain('Europe');
+    expect(result.headline).toContain('hola traverse le monde');
   });
 
   it('returns "Americas" narrative around 80%', () => {
@@ -50,18 +50,18 @@ describe('computeNarrative (FR)', () => {
     expect(result.headline).toContain('Amériques');
   });
 
-  it('returns "tour du monde" when wave is complete', () => {
+  it('returns "hola tour du monde" when wave is complete', () => {
     // 35/38 = 92% → >= 0.9 → waveComplete
     const result = computeNarrative(makeBands(35, 1), narrativesFr, citiesFr);
     expect(result.headline).toContain('tour du monde');
   });
 
-  it('always returns headline and detail', () => {
+  it('always returns headline (detail can be empty for some phases)', () => {
     for (let done = 0; done <= 37; done++) {
       const bands = makeBands(done, done < 38 ? 1 : 0);
       const result = computeNarrative(bands, narrativesFr, citiesFr);
       expect(result.headline).toBeTruthy();
-      expect(result.detail).toBeTruthy();
+      expect(typeof result.detail).toBe('string');
     }
   });
 });

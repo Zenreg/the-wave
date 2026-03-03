@@ -45,7 +45,7 @@ function AppInner() {
       )}
 
       {screen === 'landing' && (
-        <LandingScreen onEnter={() => goToScreen('countdown')} />
+        <LandingScreen onEnter={() => goToScreen('countdown')} userLng={geoPoint.lng} />
       )}
 
       {screen === 'countdown' && (
@@ -54,6 +54,7 @@ function AppInner() {
           onReady={() => goToScreen('action')}
           participation={participation}
           userLng={geoPoint.lng}
+          myPoint={geoPoint}
         />
       )}
 

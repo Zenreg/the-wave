@@ -1,14 +1,13 @@
+import { useState, useEffect } from 'react';
 import { useTimezoneWave } from '../hooks/useTimezoneWave';
 import { useWaveNarrative } from '../hooks/useWaveNarrative';
 import { useLocale } from '../i18n';
 import type { GeoPoint } from '../types';
 import type { useParticipation } from '../hooks/useParticipation';
-import { useSimulatedDots } from '../hooks/useSimulatedDots';
+import { subscribeToPush, isPushSubscribed } from '../lib/pushSubscription';
 import ParticipantCounter from './ParticipantCounter';
 import WorldMap from './WorldMap';
 import BreathingOrb from './BreathingOrb';
-
-const SIM_ENABLED = true;
 
 interface ResultScreenProps {
   actionText?: string;
@@ -16,13 +15,42 @@ interface ResultScreenProps {
   myPoint?: GeoPoint;
 }
 
+const SHARE_URL = 'https://wave.30jourspourchanger.com';
+
 export default function ResultScreen({ actionText, participation, myPoint }: ResultScreenProps) {
   const { totalCount, myTzCount, yesterdayCount, dots } = participation;
   const { bands, waveCenterLng } = useTimezoneWave(myPoint?.lng);
   const narrative = useWaveNarrative(bands);
   const { t, formatNumber } = useLocale();
-  const simDots = useSimulatedDots(SIM_ENABLED);
-  const allDots = SIM_ENABLED ? [...dots, ...simDots] : dots;
+  const [copied, setCopied] = useState(false);
+  const [pushStatus, setPushStatus] = useState<'idle' | 'subscribed' | 'unavailable'>('idle');
+
+  useEffect(() => {
+    isPushSubscribed().then(ok => {
+      if (ok) setPushStatus('subscribed');
+      else if (!('PushManager' in window)) setPushStatus('unavailable');
+    });
+  }, []);
+
+  const handleReminder = async () => {
+    const ok = await subscribeToPush();
+    setPushStatus(ok ? 'subscribed' : 'idle');
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: 'TheWave',
+      text: t('result.shareText'),
+      url: SHARE_URL,
+    };
+    if (navigator.share) {
+      try { await navigator.share(shareData); } catch { /* annulé */ }
+    } else {
+      await navigator.clipboard.writeText(`${t('result.shareText')} ${SHARE_URL}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
     <div className="screen screen-enter overflow-y-auto">
@@ -39,6 +67,12 @@ export default function ResultScreen({ actionText, participation, myPoint }: Res
           targetCount={totalCount}
           label={t('result.participantLabel')}
         />
+
+        {totalCount <= 50 && (
+          <p className="text-sm text-amber-300/70 font-light tracking-wide">
+            {t('result.pioneerLabel')}
+          </p>
+        )}
 
         {myTzCount > 0 && (
           <p className="text-sm text-indigo-300/60 font-light">
@@ -63,7 +97,26 @@ export default function ResultScreen({ actionText, participation, myPoint }: Res
         </div>
 
         <div className="w-full mt-4">
-          <WorldMap waveCenterLng={waveCenterLng} dots={allDots} myPoint={myPoint} />
+          <WorldMap waveCenterLng={waveCenterLng} dots={dots} myPoint={myPoint} />
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+          <button
+            onClick={handleShare}
+            className="px-6 py-2.5 rounded-full border border-indigo-500/30 text-sm text-indigo-300 font-light tracking-wide hover:bg-indigo-500/10 transition-colors"
+          >
+            {copied ? t('result.linkCopied') : t('result.share')}
+          </button>
+
+          {pushStatus !== 'unavailable' && (
+            <button
+              onClick={handleReminder}
+              disabled={pushStatus === 'subscribed'}
+              className="px-6 py-2.5 rounded-full border border-amber-500/30 text-sm text-amber-300/80 font-light tracking-wide hover:bg-amber-500/10 transition-colors disabled:opacity-50"
+            >
+              {pushStatus === 'subscribed' ? t('result.reminderEnabled') : t('result.enableReminder')}
+            </button>
+          )}
         </div>
 
         <p className="text-sm text-slate-600 font-light mt-4">

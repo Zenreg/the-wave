@@ -22,9 +22,15 @@ export interface TranslationKeys {
 
   // ResultScreen
   'result.participantLabel': string;
+  'result.pioneerLabel': string;
   'result.nearYou': string;
   'result.yesterday': string;
   'result.comeBack': string;
+  'result.share': string;
+  'result.shareText': string;
+  'result.linkCopied': string;
+  'result.enableReminder': string;
+  'result.reminderEnabled': string;
 
   // CircularTimer
   'timer.aria': string;
