@@ -60,7 +60,7 @@ function InstallButton({ canPrompt, isIOS, isInstalled, install, t }: {
           {t('landing.install')}
         </button>
         {showTip && (
-          <p className="mt-1 text-xs text-slate-400/60 font-light px-6 animate-fade-in">
+          <p className="mt-1 text-xs text-slate-400/60 font-light px-6 animate-fade-in whitespace-pre-line">
             {t('landing.installIOS')}
           </p>
         )}

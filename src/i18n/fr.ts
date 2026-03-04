@@ -7,7 +7,7 @@ const fr: TranslationKeys = {
   'landing.concept3': 'Pas de compte. Pas de like. Pas de bruit. Juste toi, et le reste du monde.',
   'landing.enter': 'Entrer',
   'landing.install': 'Installer l\u2019app sur mon t\u00e9l\u00e9phone',
-  'landing.installIOS': 'Pour installer : tape Partager puis \u00ab Sur l\u2019\u00e9cran d\u2019accueil \u00bb',
+  'landing.installIOS': '1. Tape \u2b06\ufe0f en bas de Safari\n2. Puis \u00ab Sur l\u2019\u00e9cran d\u2019accueil \u00bb',
 
   'countdown.nextMoment': 'Prochain moment collectif',
   'countdown.timerAria': '{hours} heures {minutes} minutes {seconds} secondes',

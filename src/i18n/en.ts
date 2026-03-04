@@ -7,7 +7,7 @@ const en: TranslationKeys = {
   'landing.concept3': 'No account. No likes. No noise. Just you, and the rest of the world.',
   'landing.enter': 'Enter',
   'landing.install': 'Install the app on my phone',
-  'landing.installIOS': 'To install: tap Share then \u201cAdd to Home Screen\u201d',
+  'landing.installIOS': '1. Tap \u2b06\ufe0f at the bottom of Safari\n2. Then \u201cAdd to Home Screen\u201d',
 
   'countdown.nextMoment': 'Next collective moment',
   'countdown.timerAria': '{hours} hours {minutes} minutes {seconds} seconds',
