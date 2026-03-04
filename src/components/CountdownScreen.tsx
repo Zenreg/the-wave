@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useCountdown } from '../hooks/useCountdown';
 import { useTimezoneWave } from '../hooks/useTimezoneWave';
 import { useLocale } from '../i18n';
 import { useShare } from '../hooks/useShare';
-import { useInstallPrompt } from '../hooks/useInstallPrompt';
 import type { useParticipation } from '../hooks/useParticipation';
 import BreathingOrb from './BreathingOrb';
 import WorldMap from './WorldMap';
@@ -28,49 +27,6 @@ function getWaveElapsed(): { started: boolean; hours: number; minutes: number } 
   };
 }
 
-function InstallButton({ canPrompt, isIOS, isInstalled, install, t }: {
-  canPrompt: boolean; isIOS: boolean; isInstalled: boolean;
-  install: () => Promise<boolean>;
-  t: ReturnType<typeof useLocale>['t'];
-}) {
-  const [showTip, setShowTip] = useState(false);
-
-  if (isInstalled) return null;
-
-  // Chrome/Edge Android : install natif
-  if (canPrompt) {
-    return (
-      <button
-        onClick={install}
-        className="mt-2 text-xs text-slate-400/70 font-light hover:text-slate-300 active:text-slate-200 transition-colors"
-      >
-        {t('landing.install')}
-      </button>
-    );
-  }
-
-  // iOS Safari : bouton qui révèle les instructions au tap
-  if (isIOS) {
-    return (
-      <div className="mt-2 text-center">
-        <button
-          onClick={() => setShowTip(v => !v)}
-          className="text-xs text-slate-400/70 font-light hover:text-slate-300 active:text-slate-200 transition-colors"
-        >
-          {t('landing.install')}
-        </button>
-        {showTip && (
-          <p className="mt-1 text-xs text-slate-400/60 font-light px-6 animate-fade-in whitespace-pre-line">
-            {t('landing.installIOS')}
-          </p>
-        )}
-      </div>
-    );
-  }
-
-  return null;
-}
-
 interface CountdownScreenProps {
   actionText?: string;
   onReady: () => void;
@@ -84,7 +40,6 @@ export default function CountdownScreen({ actionText, onReady, participation, us
   const { t } = useLocale();
   const { totalCount, yesterdayCount, dots } = participation;
   const { handleShare, copied } = useShare();
-  const { canPrompt, isIOS, isInstalled, install } = useInstallPrompt();
   const waveElapsed = getWaveElapsed();
 
   useEffect(() => {
@@ -158,8 +113,6 @@ export default function CountdownScreen({ actionText, onReady, participation, us
         >
           {copied ? t('result.linkCopied') : t('result.share')}
         </button>
-
-        <InstallButton canPrompt={canPrompt} isIOS={isIOS} isInstalled={isInstalled} install={install} t={t} />
       </div>
     </div>
   );
