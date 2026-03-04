@@ -3,6 +3,7 @@ import { useCountdown } from '../hooks/useCountdown';
 import { useTimezoneWave } from '../hooks/useTimezoneWave';
 import { useLocale } from '../i18n';
 import { useShare } from '../hooks/useShare';
+import { useInstallPrompt } from '../hooks/useInstallPrompt';
 import type { useParticipation } from '../hooks/useParticipation';
 import BreathingOrb from './BreathingOrb';
 import WorldMap from './WorldMap';
@@ -40,6 +41,7 @@ export default function CountdownScreen({ actionText, onReady, participation, us
   const { t } = useLocale();
   const { totalCount, yesterdayCount, dots } = participation;
   const { handleShare, copied } = useShare();
+  const { canPrompt, isIOS, isInstalled, install } = useInstallPrompt();
   const waveElapsed = getWaveElapsed();
 
   useEffect(() => {
@@ -113,6 +115,20 @@ export default function CountdownScreen({ actionText, onReady, participation, us
         >
           {copied ? t('result.linkCopied') : t('result.share')}
         </button>
+
+        {!isInstalled && canPrompt && (
+          <button
+            onClick={install}
+            className="mt-2 text-xs text-slate-400/70 font-light hover:text-slate-300 transition-colors"
+          >
+            {t('landing.install')}
+          </button>
+        )}
+        {!isInstalled && isIOS && !canPrompt && (
+          <p className="mt-2 text-xs text-slate-500/50 font-light text-center px-6">
+            {t('landing.installIOS')}
+          </p>
+        )}
       </div>
     </div>
   );

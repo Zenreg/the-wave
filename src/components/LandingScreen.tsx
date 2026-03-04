@@ -1,7 +1,6 @@
 import { useLocale } from '../i18n';
 import { useTimezoneWave } from '../hooks/useTimezoneWave';
 import { useShare } from '../hooks/useShare';
-import { useInstallPrompt } from '../hooks/useInstallPrompt';
 import WorldMap from './WorldMap';
 
 interface LandingScreenProps {
@@ -13,10 +12,9 @@ export default function LandingScreen({ onEnter, userLng }: LandingScreenProps) 
   const { t } = useLocale();
   const { waveCenterLng } = useTimezoneWave(userLng);
   const { handleShare, copied } = useShare();
-  const { canPrompt, isIOS, isInstalled, install } = useInstallPrompt();
 
   return (
-    <div className="screen screen-enter flex-col justify-between py-8 sm:py-12">
+    <div className="screen screen-enter flex-col justify-between py-6 sm:py-12">
       {/* Titre + philosophie en haut */}
       <div className="text-center px-4">
         <h1 className="text-3xl sm:text-4xl font-extralight tracking-[0.3em] glow-text">
@@ -37,7 +35,7 @@ export default function LandingScreen({ onEnter, userLng }: LandingScreenProps) 
       </div>
 
       {/* La carte + bouton partager */}
-      <div className="w-full flex-1 flex flex-col items-center justify-center px-2">
+      <div className="w-full flex flex-col items-center justify-center px-2">
         <div className="w-full">
           <WorldMap waveCenterLng={waveCenterLng} />
         </div>
@@ -49,32 +47,18 @@ export default function LandingScreen({ onEnter, userLng }: LandingScreenProps) 
         </button>
       </div>
 
-      {/* Boutons en bas */}
-      <div className="flex flex-col items-center gap-3">
+      {/* Bouton Entrer en bas */}
+      <div className="flex flex-col items-center pb-4">
         <button
           onClick={onEnter}
           className="px-10 py-3 rounded-full border border-indigo-400/30 text-indigo-300
                      hover:bg-indigo-500/10 hover:border-indigo-400/50
+                     active:bg-indigo-500/20
                      transition-all duration-500 text-base font-light tracking-wider
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50"
-          autoFocus
         >
           {t('landing.enter')}
         </button>
-
-        {!isInstalled && canPrompt && (
-          <button
-            onClick={install}
-            className="text-xs text-slate-400/70 font-light hover:text-slate-300 transition-colors"
-          >
-            {t('landing.install')}
-          </button>
-        )}
-        {!isInstalled && isIOS && !canPrompt && (
-          <p className="text-xs text-slate-500/50 font-light text-center px-6">
-            {t('landing.installIOS')}
-          </p>
-        )}
       </div>
     </div>
   );
