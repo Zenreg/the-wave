@@ -1,7 +1,7 @@
 {
-  "name": "TheWave — Une hola planétaire pour ralentir",
+  "name": "TheWave — Le monde s'agite. On choisit de ralentir.",
   "short_name": "TheWave",
-  "description": "Chaque jour à 20h, rejoignez la hola mondiale. 30 secondes pour respirer ensemble.",
+  "description": "Pendant que le monde se déchire, chaque soir à 20h, une vague silencieuse traverse la planète.",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#0f172a",

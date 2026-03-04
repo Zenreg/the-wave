@@ -1,10 +1,10 @@
 import type { TranslationKeys } from './types';
 
 const en: TranslationKeys = {
-  'landing.tagline': 'A planetary wave to slow down.',
-  'landing.concept1': 'Every evening at 8\u202fPM, in every timezone, a wave crosses the world.',
-  'landing.concept2': 'One single action, 30\u202fseconds, millions of humans together.',
-  'landing.concept3': 'No account. No likes. Just you, and the rest of the world, at the same moment.',
+  'landing.tagline': 'The world is spiraling. We choose to slow down.',
+  'landing.concept1': 'While the world tears itself apart, every evening at 8\u202fPM, a silent wave crosses the planet.',
+  'landing.concept2': 'One single action, 30\u202fseconds to take a pause.',
+  'landing.concept3': 'No account. No likes. No noise. Just you, and the rest of the world.',
   'landing.enter': 'Enter',
   'landing.install': 'Install the app on my phone',
   'landing.installIOS': 'To install: tap Share then \u201cAdd to Home Screen\u201d',
@@ -28,7 +28,7 @@ const en: TranslationKeys = {
   'result.yesterday': 'Yesterday, we were {count}',
   'result.comeBack': 'Come back tomorrow at 8\u202fPM',
   'result.share': 'Share this wave',
-  'result.shareText': 'I just joined the global wave! Join us every day at 8\u202fPM \ud83c\udf0a',
+  'result.shareText': 'The world is spiraling. We choose to slow down. Every evening at 8\u202fPM, join the wave \ud83c\udf0a',
   'result.linkCopied': 'Link copied!',
   'result.addToCalendar': 'Add to my calendar',
 

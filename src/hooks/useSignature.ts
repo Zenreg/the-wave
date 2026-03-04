@@ -1,17 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 
-// Séquence signature : ↑ ↑ ↓ ↓ ← → ← → W A V E
-const SIG_SEQ = [
-  'arrowup', 'arrowup', 'arrowdown', 'arrowdown',
-  'arrowleft', 'arrowright', 'arrowleft', 'arrowright',
-  'w', 'a', 'v', 'e',
-];
+// Séquence signature : Paix@62
+const SIG_SEQ = ['p', 'a', 'i', 'x', '@', '6', '2'];
 
-// Séquence debug : 15081944
-const DBG_SEQ = ['1', '5', '0', '8', '1', '9', '4', '4'];
-
-const D = [50,9,7,5,8,21,0,18,119,119,102,58,45,63,87,8309,86,38,64,217,83,64,17,29,23,87,5,19,69,102,88,87,20,35,9,19,18];
-const K = [116,104,101,119,97,118,101,50,48,50,52];
+// Nom affiché (obfusqué par XOR)
+const D = [22, 0, 11, 10, 41, 85, 87, 112, 38, 44, 42, 14, 115, 104];
+const K = [112, 97, 105, 120, 64, 54, 50];
 
 function r(): string {
   return D.map((c, i) => String.fromCharCode(c ^ K[i % K.length])).join('');
@@ -20,17 +14,14 @@ function r(): string {
 export function useSignature() {
   const [visible, setVisible] = useState(false);
   const [text, setText] = useState('');
-  const [debug, setDebug] = useState(false);
   const sigPos = useRef(0);
-  const dbgPos = useRef(0);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      const key = e.key.toLowerCase();
+      const key = e.key;
 
-      // Signature sequence
-      if (key === SIG_SEQ[sigPos.current]) {
+      if (key === SIG_SEQ[sigPos.current] || key.toLowerCase() === SIG_SEQ[sigPos.current]) {
         sigPos.current++;
         if (sigPos.current === SIG_SEQ.length) {
           setText(r());
@@ -42,17 +33,6 @@ export function useSignature() {
       } else {
         sigPos.current = 0;
       }
-
-      // Debug sequence
-      if (e.key === DBG_SEQ[dbgPos.current]) {
-        dbgPos.current++;
-        if (dbgPos.current === DBG_SEQ.length) {
-          setDebug(d => !d);
-          dbgPos.current = 0;
-        }
-      } else {
-        dbgPos.current = 0;
-      }
     }
     window.addEventListener('keydown', onKey);
     return () => {
@@ -61,5 +41,5 @@ export function useSignature() {
     };
   }, []);
 
-  return { visible, text, debug };
+  return { visible, text };
 }
