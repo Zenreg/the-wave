@@ -9,7 +9,7 @@ export default function LocaleToggle({ audioButton }: LocaleToggleProps) {
   const { locale, setLocale } = useLocale();
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-1">
+    <div className="fixed top-4 right-4 z-50 flex flex-col items-end gap-1">
       <div className="flex gap-0.5 text-xs font-light">
         <button
           onClick={() => setLocale('fr')}

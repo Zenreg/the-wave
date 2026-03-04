@@ -10,7 +10,9 @@ const fr: TranslationKeys = {
   'countdown.nextMoment': 'Prochain moment collectif',
   'countdown.timerAria': '{hours} heures {minutes} minutes {seconds} secondes',
   'countdown.todayAction': 'Action du jour',
-  'countdown.localTime': 'La vague passe entre 19h30 et 20h30',
+  'countdown.localTime': 'La vague passe chez toi entre 19h30 et 20h30',
+  'countdown.waveStarted': 'Elle a d\u00e9marr\u00e9 il y a {hours}h{minutes}',
+  'countdown.waveNotStarted': 'Elle d\u00e9marre bient\u00f4t',
   'countdown.yesterday': 'Hier, {count} personnes ont particip\u00e9',
   'countdown.beFirst': 'Sois le premier ce soir',
 

@@ -1,12 +1,31 @@
 import { useEffect } from 'react';
 import { useCountdown } from '../hooks/useCountdown';
 import { useTimezoneWave } from '../hooks/useTimezoneWave';
-import { useWaveNarrative } from '../hooks/useWaveNarrative';
 import { useLocale } from '../i18n';
 import { useShare } from '../hooks/useShare';
 import type { useParticipation } from '../hooks/useParticipation';
 import BreathingOrb from './BreathingOrb';
 import WorldMap from './WorldMap';
+
+/** La vague démarre chaque jour à 19h30 UTC+14 (= 05h30 UTC) */
+function getWaveElapsed(): { started: boolean; hours: number; minutes: number } {
+  const now = new Date();
+  const utcH = now.getUTCHours();
+  const utcM = now.getUTCMinutes();
+  const nowMinutes = utcH * 60 + utcM;
+  const startMinutes = 5 * 60 + 30; // 05h30 UTC = 19h30 UTC+14
+
+  if (nowMinutes < startMinutes) {
+    return { started: false, hours: 0, minutes: 0 };
+  }
+
+  const elapsed = nowMinutes - startMinutes;
+  return {
+    started: true,
+    hours: Math.floor(elapsed / 60),
+    minutes: elapsed % 60,
+  };
+}
 
 interface CountdownScreenProps {
   actionText?: string;
@@ -17,11 +36,11 @@ interface CountdownScreenProps {
 
 export default function CountdownScreen({ actionText, onReady, participation, userLng }: CountdownScreenProps) {
   const { hours, minutes, seconds, isReady } = useCountdown();
-  const { bands, waveCenterLng } = useTimezoneWave(userLng);
-  const narrative = useWaveNarrative(bands);
+  const { waveCenterLng } = useTimezoneWave(userLng);
   const { t } = useLocale();
   const { totalCount, yesterdayCount, dots } = participation;
   const { handleShare, copied } = useShare();
+  const waveElapsed = getWaveElapsed();
 
   useEffect(() => {
     if (isReady) onReady();
@@ -33,8 +52,8 @@ export default function CountdownScreen({ actionText, onReady, participation, us
     <div className="screen screen-enter flex-col justify-between py-6 sm:py-10">
       <BreathingOrb size="md" color="indigo" />
 
-      {/* Timer + action en haut, compact */}
-      <div className="relative z-10 text-center">
+      {/* Timer + action en haut */}
+      <div className="relative z-10 text-center pt-6">
         <p className="text-xs uppercase tracking-[0.25em] text-slate-500 font-light mb-2">
           {t('countdown.nextMoment')}
         </p>
@@ -57,42 +76,40 @@ export default function CountdownScreen({ actionText, onReady, participation, us
         )}
       </div>
 
-      {/* La carte + bouton partager */}
-      <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center px-2">
+      {/* La carte */}
+      <div className="relative z-10 w-full flex-1 flex items-center px-2">
         <div className="w-full max-w-3xl mx-auto">
           <WorldMap waveCenterLng={waveCenterLng} dots={dots} />
         </div>
+      </div>
+
+      {/* Infos vague + compteur + partager en bas */}
+      <div className="relative z-10 text-center pb-2">
+        <p className="text-sm text-amber-200/80 font-light">
+          {t('countdown.localTime')}
+        </p>
+        <p className="text-xs text-amber-200/50 font-light">
+          {waveElapsed.started
+            ? t('countdown.waveStarted', { hours: String(waveElapsed.hours), minutes: pad(waveElapsed.minutes) })
+            : t('countdown.waveNotStarted')
+          }
+        </p>
+
+        <p className="text-sm text-amber-300/80 font-light mt-2">
+          {totalCount > 0
+            ? `${totalCount} ${t('result.participantLabel')}`
+            : yesterdayCount > 0
+              ? t('countdown.yesterday', { count: yesterdayCount })
+              : t('countdown.beFirst')
+          }
+        </p>
+
         <button
           onClick={handleShare}
-          className="mt-3 px-6 py-2 rounded-full border border-indigo-400/50 text-sm text-indigo-200 font-light tracking-wide hover:bg-indigo-500/15 hover:border-indigo-400/70 transition-all"
+          className="mt-2 px-6 py-2 rounded-full border border-amber-400/50 text-sm text-amber-200/80 font-light tracking-wide hover:bg-amber-500/15 hover:border-amber-400/70 transition-all"
         >
           {copied ? t('result.linkCopied') : t('result.share')}
         </button>
-      </div>
-
-      {/* Compteur + narrative en bas */}
-      <div className="relative z-10 text-center">
-        {totalCount > 0 && (
-          <p className="text-sm text-indigo-300/60 font-light mb-1">
-            {totalCount} {t('result.participantLabel')}
-          </p>
-        )}
-        {totalCount === 0 && yesterdayCount > 0 && (
-          <p className="text-sm text-indigo-300/50 font-light mb-1">
-            {t('countdown.yesterday', { count: yesterdayCount })}
-          </p>
-        )}
-        {totalCount === 0 && yesterdayCount === 0 && (
-          <p className="text-sm text-indigo-300/40 font-light mb-1">
-            {t('countdown.beFirst')}
-          </p>
-        )}
-        <p className="text-sm text-amber-200/70 font-light">
-          {narrative.headline}
-        </p>
-        <p className="text-xs text-slate-600 font-light mt-1">
-          {t('countdown.localTime')}
-        </p>
       </div>
     </div>
   );

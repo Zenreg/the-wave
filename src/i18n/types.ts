@@ -13,6 +13,8 @@ export interface TranslationKeys {
   'countdown.timerAria': string;
   'countdown.todayAction': string;
   'countdown.localTime': string;
+  'countdown.waveStarted': string;
+  'countdown.waveNotStarted': string;
   'countdown.yesterday': string;
   'countdown.beFirst': string;
 

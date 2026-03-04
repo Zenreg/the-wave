@@ -64,7 +64,7 @@ export default function ResultScreen({ participation, myPoint }: ResultScreenPro
         </div>
         <button
           onClick={handleShare}
-          className="mt-3 px-6 py-2 rounded-full border border-indigo-400/50 text-sm text-indigo-200 font-light tracking-wide hover:bg-indigo-500/15 hover:border-indigo-400/70 transition-all"
+          className="mt-3 px-6 py-2 rounded-full border border-amber-400/50 text-sm text-amber-200/80 font-light tracking-wide hover:bg-amber-500/15 hover:border-amber-400/70 transition-all"
         >
           {copied ? t('result.linkCopied') : t('result.share')}
         </button>
