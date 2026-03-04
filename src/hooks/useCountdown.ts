@@ -43,10 +43,17 @@ export function useCountdown(): CountdownState {
   const [state, setState] = useState<CountdownState>(() => computeState());
 
   useEffect(() => {
+    const tick = () => setState(computeState());
     const interval = setInterval(() => {
-      setState(computeState());
+      if (document.visibilityState === 'visible') tick();
     }, 1000);
-    return () => clearInterval(interval);
+    // Recalculer immédiatement quand l'onglet redevient visible
+    const onVisible = () => { if (document.visibilityState === 'visible') tick(); };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
   }, []);
 
   return state;

@@ -1,9 +1,7 @@
-import { useState } from 'react';
 import { useLocale } from '../i18n';
 import { useTimezoneWave } from '../hooks/useTimezoneWave';
+import { useShare } from '../hooks/useShare';
 import WorldMap from './WorldMap';
-
-const SHARE_URL = 'https://jointhewave.fr';
 
 interface LandingScreenProps {
   onEnter: () => void;
@@ -13,18 +11,7 @@ interface LandingScreenProps {
 export default function LandingScreen({ onEnter, userLng }: LandingScreenProps) {
   const { t } = useLocale();
   const { waveCenterLng } = useTimezoneWave(userLng);
-  const [copied, setCopied] = useState(false);
-
-  const handleShare = async () => {
-    const shareData = { title: 'TheWave', text: t('result.shareText'), url: SHARE_URL };
-    if (navigator.share) {
-      try { await navigator.share(shareData); } catch { /* annulé */ }
-    } else {
-      await navigator.clipboard.writeText(`${t('result.shareText')} ${SHARE_URL}`);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
+  const { handleShare, copied } = useShare();
 
   return (
     <div className="screen screen-enter flex-col justify-between py-8 sm:py-12">
@@ -47,32 +34,30 @@ export default function LandingScreen({ onEnter, userLng }: LandingScreenProps) 
         </p>
       </div>
 
-      {/* La carte : le coeur de l'app */}
-      <div className="w-full flex-1 flex items-center px-2">
+      {/* La carte + bouton partager */}
+      <div className="w-full flex-1 flex flex-col items-center justify-center px-2">
         <div className="w-full">
           <WorldMap waveCenterLng={waveCenterLng} />
         </div>
-      </div>
-
-      {/* Boutons en bas */}
-      <div className="flex flex-col items-center gap-3">
-        <button
-          onClick={onEnter}
-          className="px-10 py-3 rounded-full border border-indigo-400/30 text-indigo-300
-                     hover:bg-indigo-500/10 hover:border-indigo-400/50
-                     transition-all duration-500 text-base font-light tracking-wider
-                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50"
-          autoFocus
-        >
-          {t('landing.enter')}
-        </button>
         <button
           onClick={handleShare}
-          className="px-4 py-1.5 rounded-full border border-indigo-500/20 text-xs text-indigo-300/70 font-light hover:bg-indigo-500/10 transition-colors"
+          className="mt-3 px-6 py-2 rounded-full border border-indigo-400/50 text-sm text-indigo-200 font-light tracking-wide hover:bg-indigo-500/15 hover:border-indigo-400/70 transition-all"
         >
           {copied ? t('result.linkCopied') : t('result.share')}
         </button>
       </div>
+
+      {/* Bouton entrer */}
+      <button
+        onClick={onEnter}
+        className="px-10 py-3 rounded-full border border-indigo-400/30 text-indigo-300
+                   hover:bg-indigo-500/10 hover:border-indigo-400/50
+                   transition-all duration-500 text-base font-light tracking-wider
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50"
+        autoFocus
+      >
+        {t('landing.enter')}
+      </button>
     </div>
   );
 }

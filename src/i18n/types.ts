@@ -14,6 +14,7 @@ export interface TranslationKeys {
   'countdown.todayAction': string;
   'countdown.localTime': string;
   'countdown.yesterday': string;
+  'countdown.beFirst': string;
 
   // ActionScreen
   'action.duration': string;

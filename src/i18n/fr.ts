@@ -12,6 +12,7 @@ const fr: TranslationKeys = {
   'countdown.todayAction': 'Action du jour',
   'countdown.localTime': 'La vague passe entre 19h30 et 20h30',
   'countdown.yesterday': 'Hier, {count} personnes ont particip\u00e9',
+  'countdown.beFirst': 'Sois le premier ce soir',
 
   'action.duration': '30 secondes, ensemble',
   'action.cta': 'Je le fais',

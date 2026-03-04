@@ -44,7 +44,7 @@ function detectLocale(geoPoint: GeoPoint | null): Locale {
 
   if (geoPoint) return detectFromGeo(geoPoint);
 
-  return 'en';
+  return 'fr';
 }
 
 function formatNumberForLocale(locale: Locale): (n: number) => string {

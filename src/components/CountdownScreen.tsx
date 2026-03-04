@@ -1,47 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useCountdown } from '../hooks/useCountdown';
 import { useTimezoneWave } from '../hooks/useTimezoneWave';
 import { useWaveNarrative } from '../hooks/useWaveNarrative';
 import { useLocale } from '../i18n';
-import type { GeoPoint } from '../types';
+import { useShare } from '../hooks/useShare';
 import type { useParticipation } from '../hooks/useParticipation';
 import BreathingOrb from './BreathingOrb';
 import WorldMap from './WorldMap';
-
-const SHARE_URL = 'https://jointhewave.fr';
 
 interface CountdownScreenProps {
   actionText?: string;
   onReady: () => void;
   participation: ReturnType<typeof useParticipation>;
   userLng?: number;
-  myPoint?: GeoPoint;
 }
 
-export default function CountdownScreen({ actionText, onReady, participation, userLng, myPoint }: CountdownScreenProps) {
+export default function CountdownScreen({ actionText, onReady, participation, userLng }: CountdownScreenProps) {
   const { hours, minutes, seconds, isReady } = useCountdown();
   const { bands, waveCenterLng } = useTimezoneWave(userLng);
   const narrative = useWaveNarrative(bands);
   const { t } = useLocale();
   const { totalCount, yesterdayCount, dots } = participation;
-  const [copied, setCopied] = useState(false);
+  const { handleShare, copied } = useShare();
 
   useEffect(() => {
     if (isReady) onReady();
   }, [isReady, onReady]);
 
   const pad = (n: number) => String(n).padStart(2, '0');
-
-  const handleShare = async () => {
-    const shareData = { title: 'TheWave', text: t('result.shareText'), url: SHARE_URL };
-    if (navigator.share) {
-      try { await navigator.share(shareData); } catch { /* annulé */ }
-    } else {
-      await navigator.clipboard.writeText(`${t('result.shareText')} ${SHARE_URL}`);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
 
   return (
     <div className="screen screen-enter flex-col justify-between py-6 sm:py-10">
@@ -66,19 +52,25 @@ export default function CountdownScreen({ actionText, onReady, participation, us
 
         {actionText && (
           <p className="text-sm text-slate-400 font-light italic mt-3">
-            "{actionText}"
+            &ldquo;{actionText}&rdquo;
           </p>
         )}
       </div>
 
-      {/* La carte : occupe tout l'espace central */}
-      <div className="relative z-10 w-full flex-1 flex items-center px-2">
+      {/* La carte + bouton partager */}
+      <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center px-2">
         <div className="w-full max-w-3xl mx-auto">
-          <WorldMap waveCenterLng={waveCenterLng} dots={dots} myPoint={myPoint} />
+          <WorldMap waveCenterLng={waveCenterLng} dots={dots} />
         </div>
+        <button
+          onClick={handleShare}
+          className="mt-3 px-6 py-2 rounded-full border border-indigo-400/50 text-sm text-indigo-200 font-light tracking-wide hover:bg-indigo-500/15 hover:border-indigo-400/70 transition-all"
+        >
+          {copied ? t('result.linkCopied') : t('result.share')}
+        </button>
       </div>
 
-      {/* Compteur + narrative + partage en bas */}
+      {/* Compteur + narrative en bas */}
       <div className="relative z-10 text-center">
         {totalCount > 0 && (
           <p className="text-sm text-indigo-300/60 font-light mb-1">
@@ -90,20 +82,17 @@ export default function CountdownScreen({ actionText, onReady, participation, us
             {t('countdown.yesterday', { count: yesterdayCount })}
           </p>
         )}
+        {totalCount === 0 && yesterdayCount === 0 && (
+          <p className="text-sm text-indigo-300/40 font-light mb-1">
+            {t('countdown.beFirst')}
+          </p>
+        )}
         <p className="text-sm text-amber-200/70 font-light">
           {narrative.headline}
         </p>
-        <div className="flex items-center justify-center gap-4 mt-2">
-          <p className="text-xs text-slate-600 font-light">
-            {t('countdown.localTime')}
-          </p>
-          <button
-            onClick={handleShare}
-            className="px-4 py-1.5 rounded-full border border-indigo-500/20 text-xs text-indigo-300/70 font-light hover:bg-indigo-500/10 transition-colors"
-          >
-            {copied ? t('result.linkCopied') : t('result.share')}
-          </button>
-        </div>
+        <p className="text-xs text-slate-600 font-light mt-1">
+          {t('countdown.localTime')}
+        </p>
       </div>
     </div>
   );

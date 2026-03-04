@@ -12,6 +12,7 @@ const en: TranslationKeys = {
   'countdown.todayAction': "Today's action",
   'countdown.localTime': 'The wave passes between 7:30\u202fPM and 8:30\u202fPM',
   'countdown.yesterday': 'Yesterday, {count} people participated',
+  'countdown.beFirst': 'Be the first tonight',
 
   'action.duration': '30 seconds, together',
   'action.cta': "I'm doing it",

@@ -54,7 +54,6 @@ function AppInner() {
           onReady={() => goToScreen('action')}
           participation={participation}
           userLng={geoPoint.lng}
-          myPoint={geoPoint}
         />
       )}
 
