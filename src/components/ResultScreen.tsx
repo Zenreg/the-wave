@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
 import { useTimezoneWave } from '../hooks/useTimezoneWave';
 import { useWaveNarrative } from '../hooks/useWaveNarrative';
 import { useLocale } from '../i18n';
 import { useShare } from '../hooks/useShare';
+import { useCalendarReminder } from '../hooks/useCalendarReminder';
 import type { GeoPoint } from '../types';
 import type { useParticipation } from '../hooks/useParticipation';
-import { subscribeToPush, isPushSubscribed } from '../lib/pushSubscription';
 import ParticipantCounter from './ParticipantCounter';
 import WorldMap from './WorldMap';
 import BreathingOrb from './BreathingOrb';
@@ -21,19 +20,7 @@ export default function ResultScreen({ participation, myPoint }: ResultScreenPro
   const narrative = useWaveNarrative(bands);
   const { t, formatNumber } = useLocale();
   const { handleShare, copied } = useShare();
-  const [pushStatus, setPushStatus] = useState<'idle' | 'subscribed' | 'unavailable'>('idle');
-
-  useEffect(() => {
-    isPushSubscribed().then(ok => {
-      if (ok) setPushStatus('subscribed');
-      else if (!('PushManager' in window)) setPushStatus('unavailable');
-    });
-  }, []);
-
-  const handleReminder = async () => {
-    const ok = await subscribeToPush();
-    setPushStatus(ok ? 'subscribed' : 'idle');
-  };
+  const { download: downloadCalendar } = useCalendarReminder();
 
   return (
     <div className="screen screen-enter flex-col justify-between py-6 sm:py-10">
@@ -76,17 +63,14 @@ export default function ResultScreen({ participation, myPoint }: ResultScreenPro
           {narrative.headline}
         </p>
 
-        {pushStatus !== 'unavailable' && (
-          <div className="mt-3">
-            <button
-              onClick={handleReminder}
-              disabled={pushStatus === 'subscribed'}
-              className="px-5 py-2 rounded-full border border-amber-500/30 text-xs text-amber-300/80 font-light tracking-wide hover:bg-amber-500/10 transition-colors disabled:opacity-50"
-            >
-              {pushStatus === 'subscribed' ? t('result.reminderEnabled') : t('result.enableReminder')}
-            </button>
-          </div>
-        )}
+        <div className="mt-3">
+          <button
+            onClick={downloadCalendar}
+            className="px-5 py-2 rounded-full border border-amber-500/30 text-xs text-amber-300/80 font-light tracking-wide hover:bg-amber-500/10 transition-colors"
+          >
+            {t('result.addToCalendar')}
+          </button>
+        </div>
 
         <p className="text-xs text-slate-600 font-light mt-2">
           {t('result.comeBack')}

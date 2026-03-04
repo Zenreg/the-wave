@@ -6,6 +6,8 @@ const en: TranslationKeys = {
   'landing.concept2': 'One single action, 30\u202fseconds, millions of humans together.',
   'landing.concept3': 'No account. No likes. Just you, and the rest of the world, at the same moment.',
   'landing.enter': 'Enter',
+  'landing.install': 'Install the app on my phone',
+  'landing.installIOS': 'To install: tap Share then \u201cAdd to Home Screen\u201d',
 
   'countdown.nextMoment': 'Next collective moment',
   'countdown.timerAria': '{hours} hours {minutes} minutes {seconds} seconds',
@@ -28,8 +30,7 @@ const en: TranslationKeys = {
   'result.share': 'Share this wave',
   'result.shareText': 'I just joined the global wave! Join us every day at 8\u202fPM \ud83c\udf0a',
   'result.linkCopied': 'Link copied!',
-  'result.enableReminder': 'Remind me every day',
-  'result.reminderEnabled': 'Reminder enabled!',
+  'result.addToCalendar': 'Add to my calendar',
 
   'timer.aria': '{seconds} seconds remaining',
 

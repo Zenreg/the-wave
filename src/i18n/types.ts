@@ -7,6 +7,8 @@ export interface TranslationKeys {
   'landing.concept2': string;
   'landing.concept3': string;
   'landing.enter': string;
+  'landing.install': string;
+  'landing.installIOS': string;
 
   // CountdownScreen
   'countdown.nextMoment': string;
@@ -32,8 +34,7 @@ export interface TranslationKeys {
   'result.share': string;
   'result.shareText': string;
   'result.linkCopied': string;
-  'result.enableReminder': string;
-  'result.reminderEnabled': string;
+  'result.addToCalendar': string;
 
   // CircularTimer
   'timer.aria': string;

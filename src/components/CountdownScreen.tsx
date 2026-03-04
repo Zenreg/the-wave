@@ -95,18 +95,21 @@ export default function CountdownScreen({ actionText, onReady, participation, us
           }
         </p>
 
-        <p className="text-sm text-amber-300/80 font-light mt-2">
+        <p className="text-base text-amber-300 font-medium mt-2">
           {totalCount > 0
             ? `${totalCount} ${t('result.participantLabel')}`
-            : yesterdayCount > 0
-              ? t('countdown.yesterday', { count: yesterdayCount })
-              : t('countdown.beFirst')
+            : t('countdown.beFirst')
           }
         </p>
+        {totalCount === 0 && yesterdayCount > 0 && (
+          <p className="text-xs text-amber-200/50 font-light">
+            {t('countdown.yesterday', { count: yesterdayCount })}
+          </p>
+        )}
 
         <button
           onClick={handleShare}
-          className="mt-2 px-6 py-2 rounded-full border border-amber-400/50 text-sm text-amber-200/80 font-light tracking-wide hover:bg-amber-500/15 hover:border-amber-400/70 transition-all"
+          className="mt-3 px-8 py-2.5 rounded-full border-2 border-amber-400/70 text-base text-amber-200 font-normal tracking-wide hover:bg-amber-500/20 hover:border-amber-400 transition-all"
         >
           {copied ? t('result.linkCopied') : t('result.share')}
         </button>

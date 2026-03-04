@@ -6,6 +6,8 @@ const fr: TranslationKeys = {
   'landing.concept2': 'Une seule action, 30\u00a0secondes, des millions d\u2019humains ensemble.',
   'landing.concept3': 'Pas de compte. Pas de like. Juste toi, et le reste du monde, au m\u00eame instant.',
   'landing.enter': 'Entrer',
+  'landing.install': 'Installer l\u2019app sur mon t\u00e9l\u00e9phone',
+  'landing.installIOS': 'Pour installer : tape Partager puis \u00ab Sur l\u2019\u00e9cran d\u2019accueil \u00bb',
 
   'countdown.nextMoment': 'Prochain moment collectif',
   'countdown.timerAria': '{hours} heures {minutes} minutes {seconds} secondes',
@@ -28,8 +30,7 @@ const fr: TranslationKeys = {
   'result.share': 'Partager cette hola',
   'result.shareText': 'Je viens de participer \u00e0 la hola mondiale ! Rejoins-nous chaque jour \u00e0 20h \ud83c\udf0a',
   'result.linkCopied': 'Lien copi\u00e9 !',
-  'result.enableReminder': 'Me rappeler chaque jour',
-  'result.reminderEnabled': 'Rappel activ\u00e9 !',
+  'result.addToCalendar': 'Ajouter \u00e0 mon calendrier',
 
   'timer.aria': '{seconds} secondes restantes',
 
