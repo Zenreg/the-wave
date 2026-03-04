@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCountdown } from '../hooks/useCountdown';
 import { useTimezoneWave } from '../hooks/useTimezoneWave';
 import { useLocale } from '../i18n';
@@ -26,6 +26,49 @@ function getWaveElapsed(): { started: boolean; hours: number; minutes: number } 
     hours: Math.floor(elapsed / 60),
     minutes: elapsed % 60,
   };
+}
+
+function InstallButton({ canPrompt, isIOS, isInstalled, install, t }: {
+  canPrompt: boolean; isIOS: boolean; isInstalled: boolean;
+  install: () => Promise<boolean>;
+  t: ReturnType<typeof useLocale>['t'];
+}) {
+  const [showTip, setShowTip] = useState(false);
+
+  if (isInstalled) return null;
+
+  // Chrome/Edge Android : install natif
+  if (canPrompt) {
+    return (
+      <button
+        onClick={install}
+        className="mt-2 text-xs text-slate-400/70 font-light hover:text-slate-300 active:text-slate-200 transition-colors"
+      >
+        {t('landing.install')}
+      </button>
+    );
+  }
+
+  // iOS Safari : bouton qui révèle les instructions au tap
+  if (isIOS) {
+    return (
+      <div className="mt-2 text-center">
+        <button
+          onClick={() => setShowTip(v => !v)}
+          className="text-xs text-slate-400/70 font-light hover:text-slate-300 active:text-slate-200 transition-colors"
+        >
+          {t('landing.install')}
+        </button>
+        {showTip && (
+          <p className="mt-1 text-xs text-slate-400/60 font-light px-6 animate-fade-in">
+            {t('landing.installIOS')}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  return null;
 }
 
 interface CountdownScreenProps {
@@ -116,19 +159,7 @@ export default function CountdownScreen({ actionText, onReady, participation, us
           {copied ? t('result.linkCopied') : t('result.share')}
         </button>
 
-        {!isInstalled && canPrompt && (
-          <button
-            onClick={install}
-            className="mt-2 text-xs text-slate-400/70 font-light hover:text-slate-300 transition-colors"
-          >
-            {t('landing.install')}
-          </button>
-        )}
-        {!isInstalled && isIOS && !canPrompt && (
-          <p className="mt-2 text-xs text-slate-500/50 font-light text-center px-6">
-            {t('landing.installIOS')}
-          </p>
-        )}
+        <InstallButton canPrompt={canPrompt} isIOS={isIOS} isInstalled={isInstalled} install={install} t={t} />
       </div>
     </div>
   );
